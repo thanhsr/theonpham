@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Theon Pham — Founder, Author, Marketer</title>
-<meta name="description" content="Theon Pham — founder of Still With Jesus, author of the bilingual reader Little Lights / Pequeñas Luces, and a builder working across marketing and finance.">
+<title>Theon Pham — Bilingual Author</title>
+<meta name="description" content="Theon Pham writes gentle bilingual and faith-filled books: A Road in Bloom (Un camino en flor) and God and You.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -42,26 +42,28 @@
   .burger{display:none;background:none;border:0;cursor:pointer;width:32px;height:32px}
   .burger i{display:block;height:1.5px;background:var(--ink);margin:6px 4px}
 
-  /* hero */
-  .hero{min-height:100vh;display:grid;align-items:center;padding:110px 0 70px;position:relative}
-  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:5vw;align-items:center}
-  .hero h1{font-size:clamp(3.4rem,8vw,7rem);margin:1.1rem 0 1.2rem}
-  .hero h1 .light{display:block;font-weight:400;font-style:italic;color:var(--ink-2);font-size:.42em;letter-spacing:0;margin-top:.6rem}
-  .roles{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.6rem 0 2.2rem}
-  .roles span{font-size:.78rem;border:1px solid var(--line);padding:.42rem .9rem;border-radius:99px;background:rgba(255,255,255,.35)}
-  .lead{font-size:1.08rem;color:var(--ink-2);max-width:34rem}
+  /* buttons */
   .btns{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.3rem}
   .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.95rem 1.6rem;border-radius:99px;text-decoration:none;font-size:.86rem;font-weight:500;transition:transform .25s, background .25s, color .25s}
   .btn.dark{background:var(--ink);color:var(--paper)}
   .btn.dark:hover{background:var(--gold);transform:translateY(-2px)}
   .btn.ghost{border:1px solid var(--ink)}
   .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+
+  /* hero */
+  .hero{min-height:100vh;display:grid;align-items:center;padding:110px 0 70px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:5vw;align-items:center}
+  .hero h1{font-size:clamp(3.4rem,8vw,7rem);margin:1.1rem 0 1.2rem}
+  .hero h1 .light{display:block;font-weight:400;font-style:italic;color:var(--ink-2);font-size:.42em;letter-spacing:0;margin-top:.6rem}
+  .lead{font-size:1.08rem;color:var(--ink-2);max-width:34rem}
+  .roles{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.6rem 0 0}
+  .roles span{font-size:.78rem;border:1px solid var(--line);padding:.42rem .9rem;border-radius:99px;background:rgba(255,255,255,.35)}
   .portrait{position:relative;justify-self:end;width:100%;max-width:440px}
   .portrait .frame{position:relative;border-radius:240px 240px 6px 6px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 40px 80px -30px rgba(60,40,10,.35)}
   .portrait img{width:100%;height:100%;object-fit:cover;filter:saturate(.92) contrast(1.02)}
   .portrait::before{content:"";position:absolute;inset:-18px 18px 18px -18px;border:1px solid var(--gold-soft);border-radius:240px 240px 6px 6px;z-index:-1}
   .sun{position:absolute;width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f1c46f,var(--gold));right:-14px;top:22%;box-shadow:0 0 60px rgba(232,170,70,.5);animation:float 6s ease-in-out infinite}
-  .badge{position:absolute;left:-36px;bottom:42px;background:var(--paper);border:1px solid var(--line);padding:1rem 1.2rem;border-radius:14px;box-shadow:0 20px 40px -20px rgba(0,0,0,.25);max-width:220px}
+  .badge{position:absolute;left:-36px;bottom:42px;background:var(--paper);border:1px solid var(--line);padding:1rem 1.2rem;border-radius:14px;box-shadow:0 20px 40px -20px rgba(0,0,0,.25);max-width:230px;text-decoration:none}
   .badge b{font-family:var(--serif);font-size:1.25rem;font-weight:600;display:block;line-height:1.2}
   .badge small{font-size:.74rem;color:var(--muted);line-height:1.4;display:block;margin-top:.2rem}
   @keyframes float{50%{transform:translateY(-12px)}}
@@ -69,6 +71,43 @@
   .scroll-cue::after{content:"";width:1px;height:40px;background:linear-gradient(var(--gold),transparent)}
 
   section{padding:120px 0;position:relative}
+
+  /* books */
+  .books-head{display:flex;justify-content:space-between;align-items:end;gap:2rem;flex-wrap:wrap;margin-bottom:4rem}
+  .books-head p{max-width:30rem;color:var(--ink-2)}
+  .feature{display:grid;grid-template-columns:.8fr 1.2fr;gap:6vw;align-items:center;background:var(--paper-2);border-radius:28px;padding:4.5rem 5vw;position:relative;overflow:hidden}
+  .feature + .feature{margin-top:2rem}
+  .feature.flip{grid-template-columns:1.2fr .8fr}
+  .feature.flip .cover{order:2}
+  .feature.dark{background:var(--night);color:#efe6d6}
+  .feature.dark::before{content:"";position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(200,144,47,.22),transparent 65%);left:-180px;top:-180px}
+  .feature.dark p,.feature.dark li{color:#c9bfae}
+  .feature.dark .eyebrow{color:var(--gold-soft)}
+  .feature > *{position:relative}
+  .cover{perspective:1400px;justify-self:center;display:block;text-decoration:none}
+  .cover img,.cover .ph{width:min(300px,68vw);border-radius:3px 8px 8px 3px;box-shadow:-2px 0 0 rgba(0,0,0,.08) inset, 30px 40px 60px -20px rgba(40,25,5,.5), 4px 4px 0 rgba(0,0,0,.06);transform:rotateY(-14deg) rotateX(3deg);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+  .feature.flip .cover img,.feature.flip .cover .ph{transform:rotateY(14deg) rotateX(3deg)}
+  .cover:hover img,.cover:hover .ph{transform:rotateY(0) rotateX(0)!important}
+  .cover .ph{display:none;aspect-ratio:2/3;background:linear-gradient(160deg,#fbf6ec,#efe2c8);color:var(--ink);padding:2.2rem 1.6rem;flex-direction:column;justify-content:center;text-align:center;font-family:var(--serif)}
+  .cover .ph b{font-size:2rem;font-weight:500;line-height:1.05;letter-spacing:.04em;text-transform:uppercase}
+  .cover .ph i{color:var(--gold);font-size:1.3rem;margin-top:.6rem}
+  .cover .ph small{font-family:var(--sans);font-size:.72rem;color:var(--muted);margin-top:1.4rem}
+  .cover.noimg img{display:none}
+  .cover.noimg .ph{display:flex}
+  .feature h3{font-size:clamp(2.3rem,3.8vw,3.2rem)}
+  .feature .es{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:1.7rem;margin-top:.2rem}
+  .feature .tagline{font-family:var(--serif);font-size:1.45rem;line-height:1.35;margin-top:1rem;font-style:italic}
+  .feature p{color:var(--ink-2);margin-top:1rem}
+  .feature ul{list-style:none;margin-top:1.4rem;display:grid;gap:.55rem}
+  .feature li{font-size:.92rem;color:var(--ink-2);display:flex;gap:.7rem}
+  .feature li::before{content:"✦";color:var(--gold);font-size:.7rem;margin-top:.3rem}
+  .parts{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.3rem}
+  .parts span{font-size:.74rem;border:1px solid rgba(255,255,255,.16);padding:.3rem .75rem;border-radius:99px;color:#e4d9c6}
+  .facts{display:flex;gap:2.4rem;flex-wrap:wrap;margin-top:1.8rem}
+  .facts div b{font-family:var(--serif);font-size:2rem;font-weight:600;display:block;line-height:1}
+  .facts div span{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .feature.dark .btn.dark{background:var(--gold);color:var(--night)}
+  .feature.dark .btn.dark:hover{background:#efe6d6}
 
   /* about */
   .about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:6vw}
@@ -79,60 +118,8 @@
   .pillars b{font-family:var(--serif);font-size:1.35rem;font-weight:600;display:block}
   .pillars span{font-size:.85rem;color:var(--muted)}
 
-  /* venture */
-  .venture{background:var(--night);color:#efe6d6;overflow:hidden}
-  .venture::before{content:"";position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(200,144,47,.22),transparent 65%);right:-200px;top:-200px}
-  .venture .eyebrow{color:var(--gold-soft)}
-  .venture-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center;position:relative}
-  .venture p{color:#c9bfae}
-  .cat-list{display:grid;gap:1px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
-  .cat{background:var(--night);padding:1.5rem 1.7rem;display:flex;gap:1.2rem;align-items:flex-start;transition:background .3s}
-  .cat:hover{background:#221e18}
-  .cat .n{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:1.6rem;line-height:1}
-  .cat h4{font-family:var(--serif);font-size:1.35rem;font-weight:500;color:#f5eddf}
-  .cat p{font-size:.86rem;margin-top:.2rem}
-  .venture .btn.ghost{border-color:#efe6d6;color:#efe6d6}
-  .venture .btn.ghost:hover{background:#efe6d6;color:var(--night)}
-  .site-tag{display:inline-flex;align-items:center;gap:.6rem;font-size:.82rem;color:var(--gold-soft);margin:1.2rem 0 1.4rem}
-  .site-tag::before{content:"";width:8px;height:8px;border-radius:50%;background:#7ec97e;box-shadow:0 0 10px #7ec97e}
-
-  /* books */
-  .books-head{display:flex;justify-content:space-between;align-items:end;gap:2rem;flex-wrap:wrap;margin-bottom:4rem}
-  .books-head p{max-width:30rem;color:var(--ink-2)}
-  .feature{display:grid;grid-template-columns:.8fr 1.2fr;gap:6vw;align-items:center;background:var(--paper-2);border-radius:28px;padding:4.5rem 5vw;position:relative;overflow:hidden}
-  .cover{perspective:1400px;justify-self:center}
-  .cover img{width:min(320px,70vw);border-radius:3px 8px 8px 3px;box-shadow:-2px 0 0 #d9ceb8 inset, 30px 40px 60px -20px rgba(60,40,10,.45), 4px 4px 0 #e8dfcc;transform:rotateY(-14deg) rotateX(3deg);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
-  .cover:hover img{transform:rotateY(0) rotateX(0)}
-  .feature h3{font-size:clamp(2.4rem,4vw,3.4rem)}
-  .feature .es{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:1.7rem;margin-top:.2rem}
-  .feature p{color:var(--ink-2);margin-top:1rem}
-  .sample{margin:2rem 0;border-left:2px solid var(--gold);padding:.4rem 0 .4rem 1.4rem}
-  .sample .en{font-family:var(--serif);font-size:1.35rem;line-height:1.4}
-  .sample .sp{font-family:var(--serif);font-style:italic;font-size:1.2rem;color:var(--muted);margin-top:.3rem}
-  .facts{display:flex;gap:2.4rem;flex-wrap:wrap;margin-top:1.6rem}
-  .facts div b{font-family:var(--serif);font-size:2rem;font-weight:600;display:block;line-height:1}
-  .facts div span{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .next-books{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:1.6rem}
-  .nb{border:1px dashed rgba(29,26,22,.25);border-radius:20px;padding:2rem;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;transition:border-color .3s, transform .3s}
-  .nb:hover{border-color:var(--gold);transform:translateY(-4px)}
-  .nb .tag{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-  .nb h4{font-family:var(--serif);font-size:1.5rem;font-weight:500;margin-top:.6rem}
-  .nb p{font-size:.86rem;color:var(--muted)}
-
-  /* expertise */
-  .exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:3.5rem}
-  .exp{background:rgba(255,255,255,.45);border:1px solid var(--line);border-radius:24px;padding:2.4rem 2rem;transition:transform .35s, box-shadow .35s;position:relative;overflow:hidden}
-  .exp:hover{transform:translateY(-6px);box-shadow:0 30px 60px -30px rgba(60,40,10,.3)}
-  .exp .ic{width:52px;height:52px;border-radius:50%;background:var(--ink);display:grid;place-items:center;margin-bottom:1.6rem}
-  .exp .ic svg{width:24px;height:24px;stroke:var(--gold-soft);fill:none;stroke-width:1.5}
-  .exp h3{font-size:1.9rem}
-  .exp p{color:var(--ink-2);font-size:.92rem;margin:.8rem 0 1.2rem}
-  .exp ul{list-style:none;border-top:1px solid var(--line)}
-  .exp li{font-size:.86rem;padding:.6rem 0;border-bottom:1px solid var(--line);display:flex;gap:.6rem}
-  .exp li::before{content:"✦";color:var(--gold);font-size:.7rem;margin-top:.25rem}
-
   /* quote */
-  .quote{text-align:center;padding:140px 0}
+  .quote{text-align:center;padding:120px 0 140px}
   .quote blockquote{font-family:var(--serif);font-size:clamp(2rem,4.4vw,3.6rem);line-height:1.25;font-weight:400;max-width:58rem;margin:0 auto}
   .quote blockquote em{color:var(--gold)}
   .quote cite{display:block;margin-top:2rem;font-style:normal;font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted)}
@@ -149,6 +136,7 @@
   .copy-btn{border:1px solid rgba(255,255,255,.25);background:none;color:var(--paper);padding:.35rem .8rem;border-radius:99px;font:500 .72rem var(--sans);cursor:pointer}
   footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-top:1px solid rgba(255,255,255,.1);margin-top:90px;padding-top:28px;font-size:.78rem;color:#8d8475}
 
+  /* social */
   .social{display:flex;gap:.7rem;align-items:center}
   .social a{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:background .25s,border-color .25s,transform .25s}
   .social a svg{width:17px;height:17px;fill:var(--ink-2);transition:fill .25s}
@@ -161,6 +149,7 @@
   .social.dark a:hover{background:var(--gold);border-color:var(--gold)}
   .social.dark a:hover svg{fill:var(--ink)}
   .social.dark{margin-top:2rem}
+
   /* reveal */
   .rv{opacity:0;transform:translateY(28px);transition:opacity 1s ease, transform 1s cubic-bezier(.2,.7,.2,1)}
   .rv.in{opacity:1;transform:none}
@@ -170,11 +159,10 @@
     .links{position:fixed;inset:74px 0 auto 0;flex-direction:column;background:var(--paper);padding:2rem;gap:1.4rem;border-bottom:1px solid var(--line);transform:translateY(-130%);transition:transform .4s}
     .links.open{transform:none}
     .burger{display:block}
-    .hero-grid,.about-grid,.venture-grid,.feature,.contact-grid{grid-template-columns:1fr}
+    .hero-grid,.about-grid,.feature,.feature.flip,.contact-grid{grid-template-columns:1fr}
+    .feature.flip .cover{order:0}
     .portrait{justify-self:center;max-width:340px;margin-top:2rem}
     .badge{left:-10px}
-    .exp-grid,.next-books{grid-template-columns:1fr}
-    .pillars{grid-template-columns:1fr 1fr 1fr}
     section{padding:90px 0}
     .feature{padding:3rem 6vw}
     .scroll-cue{display:none}
@@ -188,12 +176,10 @@
   <div class="wrap nav-in">
     <a href="#top" class="logo">Theon<span>.</span></a>
     <ul class="links" id="links">
-      <li><a href="#books">Little Lights</a></li>
+      <li><a href="#books">Books</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#venture">Still With Jesus</a></li>
-      <li><a href="#expertise">Expertise</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><a href="https://www.amazon.com/dp/B0HP6NH4KY" target="_blank" rel="noopener" class="btn dark" style="padding:.55rem 1.1rem;color:var(--paper)">Buy the book</a></li>
+      <li><a href="#books" class="btn dark" style="padding:.55rem 1.1rem;color:var(--paper)">Get the books</a></li>
     </ul>
     <button class="burger" id="burger" aria-label="Menu"><i></i><i></i><i></i></button>
   </div>
@@ -202,25 +188,24 @@
 <header class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <div class="eyebrow rv">Author · Founder · Builder</div>
-      <h1 class="rv d1">Theon Pham<span class="light">Writing small lights for a loud world.</span></h1>
-      <p class="lead rv d2">I write bilingual books that teach a language one gentle sentence at a time, starting with <em>Little Lights</em>. I also founded Still With Jesus, a faith storytelling home, and bring the marketing and financial thinking that keeps it all growing.</p>
+      <div class="eyebrow rv">Bilingual Author · Faith Writer</div>
+      <h1 class="rv d1">Theon Pham<span class="light">Gentle words on love, faith &amp; growing up.</span></h1>
+      <p class="lead rv d2">I write short, honest books you can open on any page: bilingual reflections that teach Spanish one sentence at a time, and simple truths about who God is and how He sees you.</p>
       <div class="roles rv d2">
-        <span>Author, Little Lights</span>
-        <span>Founder, StillWithJesus.com</span>
-        <span>Marketing</span>
-        <span>Finance</span>
+        <span>English · Spanish</span>
+        <span>Faith &amp; Scripture</span>
+        <span>Love &amp; growing up</span>
       </div>
       <div class="btns rv d3">
-        <a href="https://www.amazon.com/dp/B0HP6NH4KY" target="_blank" rel="noopener" class="btn dark">Buy Little Lights on Amazon ↗</a>
-        <a href="#books" class="btn ghost">Discover the book →</a>
+        <a href="#books" class="btn dark">Explore the books →</a>
+        <a href="#about" class="btn ghost">About me</a>
       </div>
       <div class="social hero-s rv d3"><a href="https://x.com/theon_ph" target="_blank" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a href="https://www.facebook.com/theonpham" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971H15.83c-1.491 0-1.956.931-1.956 1.886v2.264h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg></a><a href="https://www.youtube.com/@theonpham.official" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a><a href="https://www.pinterest.com/theonpham/" target="_blank" rel="noopener" aria-label="Pinterest" title="Pinterest"><svg viewBox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg></a></div>
     </div>
     <div class="portrait rv d2">
       <div class="frame"><img src="assets/theon.jpg" alt="Portrait of Theon Pham"></div>
       <div class="sun"></div>
-      <a class="badge" href="https://www.amazon.com/dp/B0HP6NH4KY" target="_blank" rel="noopener" style="text-decoration:none"><b>Little Lights</b><small>Pequeñas Luces · Available on Amazon ↗</small></a>
+      <a class="badge" href="#books"><b>2 new books</b><small>A Road in Bloom · God and You</small></a>
     </div>
   </div>
   <div class="scroll-cue">Scroll</div>
@@ -231,35 +216,56 @@
     <div class="books-head rv">
       <div>
         <div class="eyebrow">Books</div>
-        <h2 style="margin-top:1rem">Bilingual books, <em>one sentence</em> at a time</h2>
+        <h2 style="margin-top:1rem">Small truths, <em>one page</em> at a time</h2>
       </div>
-      <p>Each book pairs English and Spanish side by side, so learners read meaning first and absorb the language naturally, without grammar drills.</p>
+      <p>Each book holds 300 short reflections, one per page, made to be read slowly with a morning coffee or opened to whatever part you need tonight.</p>
     </div>
 
     <div class="feature rv">
-      <a class="cover" href="https://www.amazon.com/dp/B0HP6NH4KY" target="_blank" rel="noopener"><img src="assets/little-lights.jpg" alt="Little Lights / Pequeñas Luces book cover"></a>
+      <a class="cover" href="https://www.amazon.com/dp/B0HQW9N3FN" target="_blank" rel="noopener">
+        <img src="https://m.media-amazon.com/images/I/516MV-55TgL._SL1491_.jpg" alt="A Road in Bloom / Un camino en flor book cover" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+        <span class="ph"><b>A Road<br>in Bloom</b><i>Un camino en flor</i><small>Theon Pham</small></span>
+      </a>
       <div>
-        <div class="eyebrow">Featured title</div>
-        <h3 style="margin-top:.8rem">Little Lights</h3>
-        <div class="es">Pequeñas Luces</div>
-        <p>300 gentle reflections to learn Spanish, one sentence at a time. A bilingual English–Spanish reader for adults who want a calm, daily way into the language, and a few moments of quiet along the way.</p>
-        <div class="sample">
-          <div class="en">“You don't have to see the whole road. Just the next step.”</div>
-          <div class="sp">“No tienes que ver todo el camino. Solo el siguiente paso.”</div>
-        </div>
+        <div class="eyebrow">Bilingual · English – Spanish</div>
+        <h3 style="margin-top:.8rem">A Road in Bloom</h3>
+        <div class="es">Un camino en flor</div>
+        <p class="tagline">300 bilingual truths about love, peace &amp; growing up.</p>
+        <p>A gentle, bilingual journey through love, healing and the quiet art of growing up. Not a grammar textbook: short reflections on relationships, boundaries, self-worth and adulthood, written in English with natural Spanish woven right into the sentences.</p>
+        <ul>
+          <li>300 life truths on love, family, friendship, money and growth</li>
+          <li>Key Spanish phrases placed right beside the English</li>
+          <li>Bite-sized “Spanish Notes” on idioms and everyday usage</li>
+        </ul>
         <div class="facts">
-          <div><b>300</b><span>Reflections</span></div>
-          <div><b>EN · ES</b><span>Side by side</span></div>
-          <div><b>Adults</b><span>Reading level</span></div>
+          <div><b>300</b><span>Truths</span></div>
+          <div><b>EN · ES</b><span>Bilingual</span></div>
+          <div><b>304</b><span>Pages</span></div>
         </div>
-        <div class="btns"><a href="https://www.amazon.com/dp/B0HP6NH4KY" target="_blank" rel="noopener" class="btn dark">Buy on Amazon ↗</a></div>
+        <div class="btns"><a href="https://www.amazon.com/dp/B0HQW9N3FN" target="_blank" rel="noopener" class="btn dark">Buy on Amazon ↗</a></div>
       </div>
     </div>
 
-    <div class="next-books">
-      <div class="nb rv d1"><div><span class="tag">Series</span><h4>More bilingual readers</h4></div><p>New titles in the same gentle format are on the way.</p></div>
-      <div class="nb rv d2"><div><span class="tag">Format</span><h4>Sentence-first learning</h4></div><p>Short, meaningful lines you can read in a minute and remember for a day.</p></div>
-      <div class="nb rv d3"><div><span class="tag">Stay in touch</span><h4>Hear about new releases</h4></div><p><a href="#contact">Get in touch →</a></p></div>
+    <div class="feature dark flip rv">
+      <a class="cover" href="https://www.amazon.com/dp/B0HQ7PFM55" target="_blank" rel="noopener">
+        <img src="https://m.media-amazon.com/images/I/51+Gq-SsK+L._SL1500_.jpg" alt="God and You book cover" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+        <span class="ph"><b>God<br>and You</b><i>300 Truths to Hold On To</i><small>Theon Pham</small></span>
+      </a>
+      <div>
+        <div class="eyebrow">Faith · Scripture</div>
+        <h3 style="margin-top:.8rem">God and You</h3>
+        <p class="tagline">300 truths to hold on to when life gets heavy.</p>
+        <p>Maybe your prayers feel unanswered, or you are tired of holding everything together. Each page names a real struggle, answers it with the heart of God, and anchors it in a verse from Scripture.</p>
+        <div class="parts">
+          <span>You Are Loved</span><span>He Sees You</span><span>God Is Proud of You</span><span>Grace for Your Mistakes</span><span>When You Are Tired</span><span>When You Are Afraid</span><span>When It Hurts</span><span>When You Are Waiting</span><span>His Plans for You</span><span>Starting Again</span><span>Your Everyday Life</span><span>He Will Never Let Go</span>
+        </div>
+        <div class="facts">
+          <div><b>300</b><span>Truths</span></div>
+          <div><b>12</b><span>Parts</span></div>
+          <div><b>1</b><span>Verse per page</span></div>
+        </div>
+        <div class="btns"><a href="https://www.amazon.com/dp/B0HQ7PFM55" target="_blank" rel="noopener" class="btn dark">Buy on Amazon ↗</a></div>
+      </div>
     </div>
   </div>
 </section>
@@ -268,65 +274,17 @@
   <div class="wrap about-grid">
     <div class="rv">
       <div class="eyebrow">About</div>
-      <h2>Stories, faith <em>&amp;</em> the numbers behind them</h2>
+      <h2 style="margin-top:1rem">Two languages, <em>one</em> quiet faith</h2>
       <div class="rule"></div>
     </div>
     <div>
-      <p class="big rv">I believe the most lasting work is quiet: a story that finds the right reader on a hard day, a sentence that stays with you long after the page is closed.</p>
-      <p class="rv">As the founder of Still With Jesus, I run an online home for real-feeling stories of answered prayers, faith through hardship and everyday grace. As an author, I write bilingual books that pair English with Spanish so adult learners can pick up a language through short, gentle reflections.</p>
-      <p class="rv">Behind the writing sits a practical side: digital marketing, content strategy and personal finance. I care about building projects that are meaningful and sustainable at the same time.</p>
+      <p class="big rv">I believe the words that stay with us are usually the short ones: a sentence that finds you on a hard day, a verse that reminds you that you are not alone.</p>
+      <p class="rv">I write bilingual books that pair English with Spanish, so readers can pick up a new language through reflections that mean something, without drills or pressure.</p>
+      <p class="rv">My faith runs through all of it. I write simple, honest reminders of who God is and how He sees you, for anyone who is tired, waiting, or starting again.</p>
       <div class="pillars rv">
-        <div><b>Write</b><span>Books &amp; stories</span></div>
-        <div><b>Grow</b><span>Marketing &amp; content</span></div>
-        <div><b>Sustain</b><span>Finance &amp; strategy</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="venture" id="venture">
-  <div class="wrap venture-grid">
-    <div class="rv">
-      <div class="eyebrow">Founder</div>
-      <h2 style="margin-top:1rem">Still With <em>Jesus</em></h2>
-      <div class="site-tag">stillwithjesus.com</div>
-      <p>A faith storytelling site for people who need to be reminded they are not alone. Every story is written to move, comfort and point back to hope, with scripture woven gently through the narrative.</p>
-      <p style="margin-top:1rem">I lead everything from editorial direction and story structure to SEO, Google Discover strategy and audience growth.</p>
-      <div class="btns"><a href="https://stillwithjesus.com" target="_blank" rel="noopener" class="btn ghost">Read the stories ↗</a></div>
-    </div>
-    <div class="cat-list rv d2">
-      <div class="cat"><span class="n">i.</span><div><h4>Answered Prayers</h4><p>When heaven answers in its own time and way.</p></div></div>
-      <div class="cat"><span class="n">ii.</span><div><h4>Faith Through Hardship</h4><p>Holding on when the ground gives way.</p></div></div>
-      <div class="cat"><span class="n">iii.</span><div><h4>Scripture Reflections</h4><p>Old words meeting today's questions.</p></div></div>
-      <div class="cat"><span class="n">iv.</span><div><h4>Signs &amp; Strangers</h4><p>The quiet moments that feel like more than chance.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<section id="expertise">
-  <div class="wrap">
-    <div class="rv">
-      <div class="eyebrow">Expertise</div>
-      <h2 style="margin-top:1rem">What I <em>bring</em> to the table</h2>
-    </div>
-    <div class="exp-grid">
-      <div class="exp rv d1">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2.5Z"/><path d="M8 7h7M8 11h5"/></svg></div>
-        <h3>Writing &amp; Publishing</h3>
-        <p>From concept to finished book: voice, structure, bilingual formatting and self-publishing.</p>
-        <ul><li>Bilingual book design</li><li>Faith &amp; reflective storytelling</li><li>Editorial systems</li></ul>
-      </div>
-      <div class="exp rv d2">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1Z"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/></svg></div>
-        <h3>Marketing</h3>
-        <p>Building audiences around meaningful content, with strategy grounded in data.</p>
-        <ul><li>Content strategy &amp; SEO</li><li>Google Discover &amp; social growth</li><li>Book &amp; brand positioning</li></ul>
-      </div>
-      <div class="exp rv d3">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M6 16v-4M11 16V8M16 16v-6M20 5l-5 4-4-3-5 4"/></svg></div>
-        <h3>Finance</h3>
-        <p>Clear thinking about money, so creative projects can last and grow.</p>
-        <ul><li>Business models for creators</li><li>Budgeting &amp; unit economics</li><li>Personal finance mindset</li></ul>
+        <div><b>Bilingual</b><span>English &amp; Spanish</span></div>
+        <div><b>Faith</b><span>Grounded in Scripture</span></div>
+        <div><b>Gentle</b><span>One page at a time</span></div>
       </div>
     </div>
   </div>
@@ -334,8 +292,8 @@
 
 <section class="quote">
   <div class="wrap rv">
-    <blockquote>Big lights are rare. But <em>little lights</em>, kept faithfully every day, can guide someone home.</blockquote>
-    <cite>— Theon Pham</cite>
+    <blockquote>When life gets heavy, you don’t need more pressure. <em>You need the truth.</em></blockquote>
+    <cite>— Theon Pham, God and You</cite>
   </div>
 </section>
 
@@ -344,19 +302,19 @@
     <div class="contact-grid">
       <div class="rv">
         <div class="eyebrow" style="color:var(--gold-soft)">Contact</div>
-        <h2 style="margin-top:1rem">Let's make something <em>meaningful</em>.</h2>
-        <p>For collaborations, book enquiries, interviews or partnerships with Still With Jesus, I'd love to hear from you.</p>
+        <h2 style="margin-top:1rem">Let’s <em>stay</em> in touch.</h2>
+        <p>For book enquiries, interviews or collaborations, I’d love to hear from you.</p>
         <div class="social dark"><a href="https://x.com/theon_ph" target="_blank" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a href="https://www.facebook.com/theonpham" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971H15.83c-1.491 0-1.956.931-1.956 1.886v2.264h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg></a><a href="https://www.youtube.com/@theonpham.official" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a><a href="https://www.pinterest.com/theonpham/" target="_blank" rel="noopener" aria-label="Pinterest" title="Pinterest"><svg viewBox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg></a></div>
       </div>
       <div class="c-links rv d2">
         <div><span><small>Email</small><br>tecairam@gmail.com</span><button class="copy-btn" id="copy">Copy</button></div>
-        <a href="https://stillwithjesus.com" target="_blank" rel="noopener"><span><small>Website</small><br>stillwithjesus.com</span><span>↗</span></a>
-        <a href="https://www.amazon.com/dp/B0HP6NH4KY" target="_blank" rel="noopener"><span><small>Buy the book</small><br>Little Lights on Amazon</span><span>↗</span></a>
+        <a href="https://www.amazon.com/dp/B0HQW9N3FN" target="_blank" rel="noopener"><span><small>Bilingual</small><br>A Road in Bloom on Amazon</span><span>↗</span></a>
+        <a href="https://www.amazon.com/dp/B0HQ7PFM55" target="_blank" rel="noopener"><span><small>Faith</small><br>God and You on Amazon</span><span>↗</span></a>
       </div>
     </div>
     <footer>
       <span>© <span id="yr"></span> Theon Pham</span>
-      <span>Made with faith, words &amp; a little light.</span>
+      <span>Written with faith, in two languages.</span>
     </footer>
   </div>
 </section>
@@ -367,13 +325,12 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30),{passi
 const links=document.getElementById('links');
 document.getElementById('burger').onclick=()=>links.classList.toggle('open');
 links.querySelectorAll('a').forEach(a=>a.onclick=()=>links.classList.remove('open'));
-
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-
+document.querySelectorAll('.cover img').forEach(i=>{if(i.complete&&!i.naturalWidth)i.parentNode.classList.add('noimg')});
 document.getElementById('yr').textContent=new Date().getFullYear();
 document.getElementById('copy').onclick=async function(){
-  try{await navigator.clipboard.writeText('contact@theonpham.com');this.textContent='Copied';}catch(e){this.textContent='—';}
+  try{await navigator.clipboard.writeText('tecairam@gmail.com');this.textContent='Copied';}catch(e){this.textContent='—';}
 };
 </script>
 </body>
