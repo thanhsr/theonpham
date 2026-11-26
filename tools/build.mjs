@@ -382,15 +382,14 @@ ${cover ? `<link rel="preload" as="image" href="${cover.file}"${cover.variants?.
     `<body class="post-template-default single single-post postid-${esc(p.slug)} single-format-standard">` +
     nav('blog') +
     `<main id="main" class="site-main">
-  <article id="post-${esc(p.slug)}" class="post type-post status-publish format-standard ${cover ? 'has-post-thumbnail ' : ''}hentry category-${slugify(p.category || 'blog')}">
+  <article id="post-${esc(p.slug)}" class="post type-post status-publish format-standard ${cover ? 'has-post-thumbnail ' : ''}category-${slugify(p.category || 'blog')}">
     <header class="entry-header wrap-narrow">
       <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span><a href="/blog/">Blog</a><span class="separator"> » </span><span class="last">${esc(p.title)}</span></p></nav>
-      <a class="entry-cat" href="/blog/">${esc(p.category || 'Blog')}</a>
       <h1 class="entry-title">${esc(p.title)}</h1>
       ${p.excerpt ? `<p class="entry-excerpt">${esc(p.excerpt)}</p>` : ''}
       <div class="entry-meta">
         <img src="${AUTHOR.image}" alt="" width="40" height="40" class="avatar">
-        <span class="byline">By <span class="author vcard"><a class="url fn n" href="/" rel="author">${esc(AUTHOR.name)}</a></span></span>
+        <span class="byline">By <span class="author"><a href="/" rel="author">${esc(AUTHOR.name)}</a></span></span>
         <span class="sep">·</span>
         <span class="posted-on"><time class="entry-date published" datetime="${p.date_published}">${fmtDate(p.date_published)}</time>${p.date_modified !== p.date_published ? ` <span class="updated-label">Updated <time class="updated" datetime="${p.date_modified}">${fmtDate(p.date_modified)}</time></span>` : ''}</span>
         <span class="sep">·</span>
