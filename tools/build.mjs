@@ -570,16 +570,22 @@ const notFound = () =>
 // ---------- SEO checks (Rank Math style) ----------
 function seoReport(p) {
   const issues = [];
-  const kw = (p.focus_keyword || '').toLowerCase();
+  // normalise like a search engine: case, dashes and punctuation don't matter
+  const norm = (x = '') => stripTags(x).toLowerCase().replace(/[–—\-_/:,.!?()“”"'’]/g, ' ').replace(/\s+/g, ' ').trim();
+  const kw = norm(p.focus_keyword);
   const t = p.seo_title || p.title;
+  const has = (x) => (' ' + norm(x) + ' ').includes(' ' + kw + ' ');
   if (!kw) issues.push('no focus_keyword');
   else {
-    if (!t.toLowerCase().includes(kw)) issues.push('focus keyword missing from SEO title');
-    if (!(p.meta_description || '').toLowerCase().includes(kw)) issues.push('focus keyword missing from meta description');
-    if (!p.slug.includes(slugify(kw).split('-').slice(0, 3).join('-'))) issues.push('focus keyword not in URL slug');
+    if (!has(t)) issues.push('focus keyword missing from SEO title');
+    if (!has(p.meta_description)) issues.push('focus keyword missing from meta description');
+    const stop = new Set(['a', 'an', 'the', 'and', 'or', 'of', 'to', 'in', 'for', 'vs', 'with']);
+    const slugParts = new Set(p.slug.split('-'));
+    if (!kw.split(' ').filter((w) => !stop.has(w)).every((w) => slugParts.has(slugify(w)))) issues.push('focus keyword not in URL slug');
     const firstP = (p.body_html.match(/<p>([\s\S]*?)<\/p>/) || [])[1] || '';
-    if (!firstP.toLowerCase().includes(kw)) issues.push('focus keyword not in first paragraph');
-    if (!/<h2[^>]*>[^<]*?/i.test(p.body_html) || !new RegExp(`<h[23][^>]*>[^<]*${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'i').test(p.body_html)) issues.push('focus keyword not in any H2/H3');
+    if (!has(firstP)) issues.push('focus keyword not in first paragraph');
+    const heads = [...p.body_html.matchAll(/<h[23][^>]*>([\s\S]*?)<\/h[23]>/g)].map((m) => m[1]);
+    if (!heads.some(has)) issues.push('focus keyword not in any H2/H3');
   }
   if (t.length > 60) issues.push(`SEO title ${t.length} chars (aim ≤ 60)`);
   const d = (p.meta_description || '').length;
