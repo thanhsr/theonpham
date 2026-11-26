@@ -6,12 +6,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import crypto from 'node:crypto';
 import { SITE, AUTHOR, BOOKS, amazon } from './site.config.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, '_site');
 const CONTENT = path.join(ROOT, 'content');
 const QUIET = process.argv.includes('--quiet');
+// cache-busting: the CSS URL changes whenever site.css changes
+const CSS_VER = crypto.createHash('md5').update(fs.readFileSync(path.join(ROOT, 'assets/site.css'))).digest('hex').slice(0, 8);
 const log = (...a) => !QUIET && console.log(...a);
 
 // ---------- helpers ----------
@@ -138,7 +141,7 @@ ${extra}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=1">
+<link rel="stylesheet" href="/assets/site.css?v=${CSS_VER}">
 ${schema}
 </head>`;
 }
