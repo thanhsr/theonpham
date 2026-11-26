@@ -64,6 +64,15 @@ const personNode = () => ({
   url: SITE.url + '/',
   image: { '@type': 'ImageObject', '@id': SITE.url + '/#personimage', url: abs(AUTHOR.image), caption: AUTHOR.name },
   jobTitle: AUTHOR.jobTitle,
+  hasOccupation: (AUTHOR.occupations || []).map((o) => ({
+    '@type': 'Occupation', name: o,
+    ...(o === 'Translator' ? { description: `English–Spanish translator with ${AUTHOR.experienceYears} years of experience`, skills: 'English–Spanish translation, Spanish grammar' } : {}),
+  })),
+  hasCredential: (AUTHOR.credentials || []).map((cr) => ({
+    '@type': 'EducationalOccupationalCredential', name: cr.name, credentialCategory: cr.category,
+    recognizedBy: { '@type': 'Organization', name: cr.issuer, url: cr.issuerUrl },
+  })),
+  knowsLanguage: (AUTHOR.knowsLanguage || []).map((l) => ({ '@type': 'Language', name: { en: 'English', es: 'Spanish', vi: 'Vietnamese' }[l] || l, alternateName: l })),
   description: AUTHOR.shortBio,
   email: 'mailto:' + AUTHOR.email,
   knowsAbout: AUTHOR.knowsAbout,
@@ -172,14 +181,14 @@ const footer = () => `
     </div>
     <div>
       <h4>Explore</h4>
-      <ul><li><a href="/#books">Books</a></li><li><a href="/blog/">Blog</a></li><li><a href="/#about">About Theon</a></li><li><a href="/#contact">Contact</a></li><li><a href="/privacy-policy/">Privacy Policy</a></li></ul>
+      <ul><li><a href="/#books">Books</a></li><li><a href="/blog/">Blog</a></li><li><a href="/#about">About Theon</a></li><li><a href="/#contact">Contact</a></li><li><a href="/editorial-policy/">Editorial Policy</a></li><li><a href="/privacy-policy/">Privacy Policy</a></li></ul>
     </div>
     <div>
       <h4>Books</h4>
       <ul>${BOOKS.map((b) => `<li><a href="${amazon(b.asin)}" target="_blank" rel="noopener">${esc(b.short)}</a></li>`).join('')}</ul>
     </div>
   </div>
-  <div class="wrap foot-bottom"><span>© ${new Date().getFullYear()} Theon Pham</span><span><a href="/privacy-policy/">Privacy Policy</a> · Written with faith, in two languages.</span></div>
+  <div class="wrap foot-bottom"><span>© ${new Date().getFullYear()} Theon Pham</span><span><a href="/editorial-policy/">Editorial Policy</a> · <a href="/privacy-policy/">Privacy Policy</a> · Written in two languages.</span></div>
 </footer>
 <script>
 const b=document.getElementById('burger'),l=document.getElementById('links');
@@ -332,6 +341,7 @@ const authorBox = () => `<div class="author-box" id="author">
     <span class="eyebrow">Written by</span>
     <p class="author-name"><a href="/" rel="author">${esc(AUTHOR.name)}</a></p>
     <p>${esc(AUTHOR.shortBio)} He is the author of ${BOOKS.map((b) => `<a href="${amazon(b.asin)}" target="_blank" rel="noopener"><em>${esc(b.short)}</em></a>`).join(', ').replace(/, ([^,]*)$/, ' and $1')}.</p>
+    <p class="author-trust"><a href="/editorial-policy/">How articles are written and checked</a></p>
     ${socialRow()}
   </div>
 </div>`;
@@ -543,7 +553,7 @@ function renderBlogIndex(posts, clusters = [], page = 1) {
     breadcrumbNode(url + '#breadcrumb', crumbs),
     {
       '@type': 'CollectionPage', '@id': url + '#webpage', url, name: first ? 'Blog — Theon Pham' : `Blog — Page ${page} — Theon Pham`,
-      description: 'Notes on learning Spanish, faith, love and growing up by bilingual author Theon Pham.',
+      description: 'Notes on learning Spanish, translation and bilingual life by author and translator Theon Pham.',
       isPartOf: { '@id': WEBSITE_ID }, breadcrumb: { '@id': url + '#breadcrumb' }, inLanguage: SITE.lang,
       mainEntity: { '@type': 'ItemList', itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: (page - 1) * PER_PAGE + i + 1, url: p.url, name: p.title })) },
     },
@@ -561,8 +571,8 @@ function renderBlogIndex(posts, clusters = [], page = 1) {
     : '';
   return (
     head({
-      title: first ? 'Blog — Learning Spanish, Faith & Growing Up | Theon Pham' : `Blog — Page ${page} of ${pages} | Theon Pham`,
-      description: first ? 'Gentle, practical notes on learning Spanish, faith, love and growing up from bilingual author Theon Pham.' : `Page ${page} of articles on learning Spanish, faith, love and growing up from bilingual author Theon Pham.`,
+      title: first ? 'Blog — Learning Spanish & Bilingual Life | Theon Pham' : `Blog — Page ${page} of ${pages} | Theon Pham`,
+      description: first ? 'Practical notes on learning Spanish, English–Spanish translation and bilingual life from author and translator Theon Pham.' : `Page ${page} of articles on learning Spanish and bilingual life from author and translator Theon Pham.`,
       canonical: url, image: posts[0]?.cover?.file || SITE.defaultImage, imageW: posts[0]?.cover?.width || 900, imageH: posts[0]?.cover?.height || 1125,
       extra: relLinks, schema: ldjson(graph),
     }) +
@@ -571,8 +581,8 @@ function renderBlogIndex(posts, clusters = [], page = 1) {
   <header class="page-head wrap">
     <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span>${first ? '<span class="last">Blog</span>' : `<a href="/blog/">Blog</a><span class="separator"> » </span><span class="last">Page ${page}</span>`}</p></nav>
     <span class="eyebrow">The Blog</span>
-    ${first ? '<h1>Notes on <em>Spanish</em>, faith &amp; growing up</h1>' : `<h1>Articles <em>· page ${page}</em></h1>`}
-    <p>Short, honest writing from the same quiet place my books come from.</p>
+    ${first ? '<h1>Notes on <em>Spanish</em> &amp; bilingual life</h1>' : `<h1>Articles <em>· page ${page}</em></h1>`}
+    <p>Practical, honest writing on learning Spanish from a bilingual author and English–Spanish translator.</p>
   </header>
   ${guides}
   <section class="wrap latest">${guides ? '<h2 class="latest-title">Latest articles</h2>' : ''}${list.length ? `<div class="post-grid" id="latest-grid">${list.map(card).join('')}</div>${loadMore}${pager}` : '<p class="empty">New articles are coming soon.</p>'}</section>
@@ -654,6 +664,67 @@ function renderPrivacy() {
 </main>` + footer();
 }
 
+// ---------- editorial policy (E-E-A-T / trust) ----------
+const EDITORIAL_UPDATED = '2026-11-26T15:00:00+07:00';
+function renderEditorial() {
+  const url = SITE.url + '/editorial-policy/';
+  const graph = [
+    personNode(), websiteNode(),
+    breadcrumbNode(url + '#breadcrumb', [{ name: 'Home', url: SITE.url + '/' }, { name: 'Editorial Policy', url }]),
+    { '@type': 'WebPage', '@id': url + '#webpage', url, name: 'Editorial Policy — Theon Pham', about: { '@id': PERSON_ID },
+      isPartOf: { '@id': WEBSITE_ID }, breadcrumb: { '@id': url + '#breadcrumb' }, dateModified: EDITORIAL_UPDATED, inLanguage: SITE.lang },
+  ];
+  return head({
+      title: 'Editorial Policy | Theon Pham',
+      description: 'How articles on theonpham.com are written, checked and corrected: Spanish sources, regional notes, images, independence and how to report a mistake.',
+      canonical: url, image: SITE.defaultImage, imageW: 900, imageH: 1125, schema: ldjson(graph),
+    }) + `<body class="page editorial">` + nav() + `<main id="main" class="site-main">
+  <header class="entry-header wrap-narrow">
+    <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span><span class="last">Editorial Policy</span></p></nav>
+    <h1 class="entry-title">Editorial Policy</h1>
+    <div class="entry-meta"><span>Last updated: <time datetime="${EDITORIAL_UPDATED}">${fmtDate(EDITORIAL_UPDATED)}</time></span></div>
+  </header>
+  <div class="entry-content wrap-narrow legal">
+<p>This page explains how the articles on theonpham.com are written, checked and kept up to date. I want you to be able to trust what you read here, and to know exactly who is behind it.</p>
+
+<h2>Who writes this site</h2>
+<p>Every article is published by <a href="/">Theon Pham</a>, a native English speaker, DELE-certified in Spanish (Instituto Cervantes), and an English–Spanish translator with ${AUTHOR.experienceYears} years of experience. He is the author of ${BOOKS.map((b) => `<em>${esc(b.short)}</em>`).join(', ').replace(/, ([^,]*)$/, ' and $1')}. You can find my author profile on <a href="https://www.goodreads.com/author/show/73164463.Theon_Pham" target="_blank" rel="noopener me">Goodreads</a>.</p>
+
+<h2>How articles are written</h2>
+<ul>
+<li><strong>Written for English speakers.</strong> Articles focus on the real difficulties English speakers face with Spanish, and every Spanish example comes with its meaning.</li>
+<li><strong>Natural, current Spanish.</strong> Examples use everyday Latin American Spanish unless an article says otherwise. When a word or structure differs in Spain or between countries, the article says so.</li>
+<li><strong>Research and drafting tools.</strong> I may use digital tools, including AI writing assistants, to help with research, outlines and first drafts. Every article is then edited, fact-checked and approved by me before it is published, and I am responsible for everything on this site.</li>
+</ul>
+
+<h2>Sources and fact-checking</h2>
+<p>Grammar, spelling and meanings are checked against established references, mainly:</p>
+<ul>
+<li>The <a href="https://dle.rae.es/" target="_blank" rel="noopener">Diccionario de la lengua española</a> and grammar publications of the Real Academia Española (RAE) and the Association of Spanish Language Academies (ASALE).</li>
+<li>Reputable bilingual dictionaries, such as <a href="https://www.wordreference.com/" target="_blank" rel="noopener">WordReference</a>.</li>
+<li>For statistics or research claims, the original source (for example the Instituto Cervantes or professional associations), linked in the article.</li>
+</ul>
+<p>When research is genuinely debated, such as the cognitive effects of bilingualism, articles say so instead of presenting one side as settled.</p>
+
+<h2>Updates and corrections</h2>
+<p>Language advice should be accurate. If you find a mistake, a translation that sounds unnatural or information that has changed, please email <strong>${esc(AUTHOR.email)}</strong>. I review every report, correct confirmed errors promptly, and update the “Updated” date on the article when the change is meaningful.</p>
+
+<h2>Images</h2>
+<p>Photos in articles come from Pixabay under the Pixabay Content License, or from my own work. They are illustrative and credited where possible. Book covers belong to my own published books.</p>
+
+<h2>Independence and links to my books</h2>
+<ul>
+<li>No article on this site is sponsored or paid for by a third party.</li>
+<li>Some articles mention my own books where they are genuinely relevant. These are clearly labelled “From the author”.</li>
+<li>Links to Amazon go to my books’ product pages. If I ever use affiliate links, I will disclose it on the page where they appear.</li>
+</ul>
+
+<h2>Contact</h2>
+<p>Questions about this policy, translation enquiries or corrections: <strong>${esc(AUTHOR.email)}</strong>.</p>
+  </div>
+</main>` + footer();
+}
+
 // ---------- home ----------
 function renderHome(posts) {
   let html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -673,7 +744,7 @@ function renderHome(posts) {
   html = html.replace(
     /<!--LATEST_POSTS-->[\s\S]*?<!--\/LATEST_POSTS-->/,
     latest.length
-      ? `<section id="blog" class="home-blog"><div class="wrap"><div class="books-head rv"><div><div class="eyebrow">From the blog</div><h2 style="margin-top:1rem">Notes on <em>Spanish</em> &amp; faith</h2></div><p><a href="/blog/" class="btn ghost">All articles →</a></p></div><div class="post-grid">${latest.map(card).join('')}</div></div></section>`
+      ? `<section id="blog" class="home-blog"><div class="wrap"><div class="books-head rv"><div><div class="eyebrow">From the blog</div><h2 style="margin-top:1rem">Notes on <em>Spanish</em> &amp; translation</h2></div><p><a href="/blog/" class="btn ghost">All articles →</a></p></div><div class="post-grid">${latest.map(card).join('')}</div></div></section>`
       : ''
   );
   return html;
@@ -685,6 +756,7 @@ function sitemap(posts) {
     { loc: SITE.url + '/', lastmod: posts[0]?.date_modified },
     { loc: SITE.url + '/blog/', lastmod: posts[0]?.date_modified },
     { loc: SITE.url + '/privacy-policy/', lastmod: PRIVACY_UPDATED },
+    { loc: SITE.url + '/editorial-policy/', lastmod: EDITORIAL_UPDATED },
     ...posts.map((p) => ({ loc: p.url, lastmod: p.date_modified, images: p.images })),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -779,6 +851,7 @@ write('robots.txt', robots());
 write('feed.xml', feed(posts));
 write('404.html', notFound());
 write('privacy-policy/index.html', renderPrivacy());
+write('editorial-policy/index.html', renderEditorial());
 copyDir(path.join(ROOT, 'assets'), path.join(OUT, 'assets'));
 copyDir(path.join(ROOT, 'img'), path.join(OUT, 'img'));
 for (const f of ['favicon.ico', 'CNAME']) if (fs.existsSync(path.join(ROOT, f))) fs.copyFileSync(path.join(ROOT, f), path.join(OUT, f));

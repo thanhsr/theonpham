@@ -2,9 +2,9 @@
 export const SITE = {
   url: 'https://theonpham.com',
   name: 'Theon Pham',
-  tagline: 'Gentle words on love, faith & growing up.',
+  tagline: 'Learning Spanish through words that mean something.',
   description:
-    'Theon Pham is a bilingual author who writes short, honest books: English–Spanish reflections that teach Spanish one sentence at a time, and simple truths about who God is.',
+    'Theon Pham is a bilingual author and English–Spanish translator with ten years of experience. His books teach Spanish one sentence at a time, with natural Spanish and a note on real usage.',
   locale: 'en_US',
   lang: 'en-US',
   twitter: '@theon_ph',
@@ -14,18 +14,30 @@ export const SITE = {
 export const AUTHOR = {
   slug: 'theon-pham',
   name: 'Theon Pham',
-  jobTitle: 'Bilingual Author',
+  jobTitle: 'Bilingual Author & English–Spanish Translator',
+  occupations: ['Author', 'Translator'],
+  knowsLanguage: ['en', 'es'],
+  nativeLanguage: 'en',
+  experienceYears: 10,
+  credentials: [
+    {
+      name: 'DELE — Diploma de Español como Lengua Extranjera',
+      category: 'certificate',
+      issuer: 'Instituto Cervantes',
+      issuerUrl: 'https://www.cervantes.es/',
+    },
+  ],
   image: '/assets/theon.jpg',
   email: 'tecairam@gmail.com',
   shortBio:
-    'Theon Pham writes short, honest books you can open on any page: bilingual reflections that teach Spanish one sentence at a time, and simple truths about who God is and how He sees you.',
+    'Theon Pham is a native English speaker, DELE-certified in Spanish, and an English–Spanish translator with ten years of experience. He writes bilingual books that teach Spanish one sentence at a time.',
   knowsAbout: [
-    'Learning Spanish',
+    'English–Spanish translation',
+    'Spanish language',
+    'Spanish grammar',
+    'Spanish for English speakers',
     'Bilingual reading',
-    'Christian faith',
-    'Scripture',
-    'Relationships',
-    'Everyday psychology',
+    'Latin American Spanish',
   ],
   sameAs: [
     'https://www.goodreads.com/author/show/73164463.Theon_Pham',
@@ -86,20 +98,6 @@ export const BOOKS = [
     date: '2026-11-21',
     image: 'https://m.media-amazon.com/images/I/61IjFGLVrDL._SL1491_.jpg',
     languages: ['en', 'es'],
-  },
-  {
-    slug: 'god-and-you',
-    name: 'God and You',
-    short: 'God and You',
-    alt: '',
-    subtitle: '300 Truths to Hold On To When Life Gets Heavy',
-    blurb: 'One honest truth per page, each anchored in a verse from Scripture.',
-    asin: 'B0HQ7PFM55',
-    isbn: '9798167566149',
-    pages: 318,
-    date: '2026-11-03',
-    image: 'https://m.media-amazon.com/images/I/51+Gq-SsK+L._SL1500_.jpg',
-    languages: ['en'],
   },
 ];
 

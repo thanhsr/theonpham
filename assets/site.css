@@ -287,3 +287,5 @@ a.pager-num:hover{border-color:var(--line);background:rgba(255,255,255,.6)}
 .guide-list.collapsed .extra{display:none}
 .guide-list .extra{animation:fadeIn .35s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.author-box .author-trust{margin-top:.5rem;font-size:.82rem!important}
+.author-box .author-trust a{color:var(--gold-ink);text-decoration:underline;text-underline-offset:3px}
