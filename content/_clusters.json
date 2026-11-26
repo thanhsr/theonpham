@@ -11,8 +11,8 @@
           "posts": [
             {
               "slug": "bilingual-books-english-spanish",
-              "title": "How to Use Bilingual Books (English–Spanish) to Actually Learn",
-              "focus_keyword": "bilingual books english spanish",
+              "title": "How to Use English–Spanish Bilingual Books to Really Learn",
+              "focus_keyword": "english spanish bilingual books",
               "intent": "informational / commercial",
               "book": "a-road-in-bloom"
             },
@@ -52,21 +52,21 @@
             {
               "slug": "comprehensible-input-spanish",
               "title": "Comprehensible Input for Spanish: A Plain-English Guide",
-              "focus_keyword": "comprehensible input spanish",
+              "focus_keyword": "comprehensible input",
               "intent": "informational",
               "book": "a-road-in-bloom"
             },
             {
               "slug": "sentence-mining-spanish",
               "title": "Sentence Mining in Spanish: Learn Words the Way They Live",
-              "focus_keyword": "sentence mining spanish",
+              "focus_keyword": "sentence mining",
               "intent": "informational",
               "book": "love-slowly"
             },
             {
               "slug": "code-switching-english-spanish",
-              "title": "Code-Switching Between English and Spanish (and Why Spanglish Is OK)",
-              "focus_keyword": "code switching english spanish",
+              "title": "Code-Switching Between English and Spanish: Why It’s OK",
+              "focus_keyword": "code switching",
               "intent": "informational",
               "book": "a-road-in-bloom"
             }
@@ -77,14 +77,14 @@
           "posts": [
             {
               "slug": "spanish-false-friends",
-              "title": "Spanish False Friends: 30 Words That Don’t Mean What You Think",
+              "title": "Spanish False Friends: 30 Words That Fool English Speakers",
               "focus_keyword": "spanish false friends",
               "intent": "informational",
               "book": "the-mind-lies"
             },
             {
               "slug": "english-spanish-cognates",
-              "title": "English–Spanish Cognates: The Shortcut to a Bigger Vocabulary",
+              "title": "English–Spanish Cognates: A Shortcut to a Bigger Vocabulary",
               "focus_keyword": "english spanish cognates",
               "intent": "informational",
               "book": "a-road-in-bloom"
@@ -106,7 +106,7 @@
             {
               "slug": "latin-american-vs-spain-spanish",
               "title": "Latin American vs Spain Spanish: Which Should You Learn?",
-              "focus_keyword": "latin american spanish vs spain spanish",
+              "focus_keyword": "latin american vs spain spanish",
               "intent": "informational",
               "book": "a-road-in-bloom"
             }
@@ -131,7 +131,7 @@
             },
             {
               "slug": "heritage-spanish-speakers",
-              "title": "For Heritage Spanish Speakers: Reclaiming the Language You Grew Up With",
+              "title": "Heritage Spanish Speakers: Reclaiming Your Family Language",
               "focus_keyword": "heritage spanish speakers",
               "intent": "informational",
               "book": "love-slowly"
@@ -146,7 +146,7 @@
             {
               "slug": "bilingual-bible-english-spanish",
               "title": "Reading a Bilingual Bible in English and Spanish",
-              "focus_keyword": "bilingual bible english spanish",
+              "focus_keyword": "bilingual bible",
               "intent": "informational / commercial",
               "book": "god-and-you"
             }
