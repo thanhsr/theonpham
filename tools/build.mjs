@@ -1,0 +1,558 @@
+#!/usr/bin/env node
+// Static site builder for theonpham.com
+// Source:  index.html, assets/, img/, content/*.json
+// Output:  _site/  (content/ is never copied, so posts' raw JSON is not public)
+// Usage:   node tools/build.mjs [--quiet]
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { SITE, AUTHOR, BOOKS, amazon } from './site.config.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const OUT = path.join(ROOT, '_site');
+const CONTENT = path.join(ROOT, 'content');
+const QUIET = process.argv.includes('--quiet');
+const log = (...a) => !QUIET && console.log(...a);
+
+// ---------- helpers ----------
+const esc = (s = '') =>
+  String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const abs = (p) => (p && p.startsWith('http') ? p : SITE.url + p);
+const slugify = (s) =>
+  s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/<[^>]+>/g, '')
+    .replace(/&[a-z]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70);
+const stripTags = (h = '') => h.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+const wordCount = (h) => stripTags(h).split(' ').filter(Boolean).length;
+const fmtDate = (d) =>
+  new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Ho_Chi_Minh' });
+const write = (rel, data) => {
+  const f = path.join(OUT, rel);
+  fs.mkdirSync(path.dirname(f), { recursive: true });
+  fs.writeFileSync(f, data);
+};
+const copyDir = (src, dst) => {
+  if (!fs.existsSync(src)) return;
+  fs.cpSync(src, dst, { recursive: true });
+};
+const bookBySlug = Object.fromEntries(BOOKS.map((b) => [b.slug, b]));
+
+// ---------- icons ----------
+const ICONS = {
+  X: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z',
+  Facebook: 'M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971H15.83c-1.491 0-1.956.931-1.956 1.886v2.264h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z',
+  YouTube: 'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z',
+  Pinterest: 'M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z',
+  Goodreads: 'M4 3.5A1.5 1.5 0 0 1 5.5 2H19v17H5.5a1.5 1.5 0 0 0 0 3H19v-1.5h1V23H5.5A3.5 3.5 0 0 1 2 19.5v-15A1.5 1.5 0 0 1 4 3.5zm3 2.5v2h9V6H7zm0 4v2h6v-2H7z',
+};
+const socialRow = (cls = '') =>
+  `<div class="social ${cls}">` +
+  AUTHOR.social
+    .map((s) => `<a href="${s.url}" target="_blank" rel="noopener me" aria-label="${s.name}" title="${s.name}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[s.name]}"/></svg></a>`)
+    .join('') +
+  `</div>`;
+
+// ---------- schema pieces ----------
+const PERSON_ID = SITE.url + '/#person';
+const WEBSITE_ID = SITE.url + '/#website';
+const personNode = () => ({
+  '@type': 'Person',
+  '@id': PERSON_ID,
+  name: AUTHOR.name,
+  url: SITE.url + '/',
+  image: { '@type': 'ImageObject', '@id': SITE.url + '/#personimage', url: abs(AUTHOR.image), caption: AUTHOR.name },
+  jobTitle: AUTHOR.jobTitle,
+  description: AUTHOR.shortBio,
+  email: 'mailto:' + AUTHOR.email,
+  knowsAbout: AUTHOR.knowsAbout,
+  sameAs: AUTHOR.sameAs,
+  mainEntityOfPage: { '@id': SITE.url + '/#webpage' },
+});
+const websiteNode = () => ({
+  '@type': 'WebSite',
+  '@id': WEBSITE_ID,
+  url: SITE.url + '/',
+  name: SITE.name,
+  description: SITE.description,
+  publisher: { '@id': PERSON_ID },
+  inLanguage: SITE.lang,
+});
+const bookNode = (b) => ({
+  '@type': 'Book',
+  '@id': SITE.url + `/#book-${b.slug}`,
+  name: b.name,
+  alternateName: b.short,
+  description: b.subtitle + '. ' + b.blurb,
+  author: { '@id': PERSON_ID },
+  image: b.image,
+  url: amazon(b.asin),
+  sameAs: amazon(b.asin),
+  isbn: b.isbn,
+  numberOfPages: b.pages,
+  bookFormat: 'https://schema.org/Hardcover',
+  datePublished: b.date,
+  inLanguage: b.languages,
+  publisher: { '@type': 'Organization', name: 'Independently published' },
+});
+const breadcrumbNode = (id, items) => ({
+  '@type': 'BreadcrumbList',
+  '@id': id,
+  itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@id': it.url, name: it.name } })),
+});
+const ldjson = (graph) =>
+  `<script type="application/ld+json" class="rank-math-schema">${JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })}</script>`;
+
+// ---------- layout ----------
+function head({ title, description, canonical, image, imageAlt, imageW = 1200, imageH = 675, type = 'website', extra = '', schema = '' }) {
+  return `<!DOCTYPE html>
+<html lang="${SITE.lang}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(description)}">
+<meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+<link rel="canonical" href="${canonical}">
+<meta property="og:locale" content="${SITE.locale}">
+<meta property="og:type" content="${type}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(description)}">
+<meta property="og:url" content="${canonical}">
+<meta property="og:site_name" content="${esc(SITE.name)}">
+<meta property="og:image" content="${abs(image)}">
+<meta property="og:image:secure_url" content="${abs(image)}">
+<meta property="og:image:width" content="${imageW}">
+<meta property="og:image:height" content="${imageH}">
+<meta property="og:image:alt" content="${esc(imageAlt || title)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(title)}">
+<meta name="twitter:description" content="${esc(description)}">
+<meta name="twitter:site" content="${SITE.twitter}">
+<meta name="twitter:creator" content="${SITE.twitter}">
+<meta name="twitter:image" content="${abs(image)}">
+${extra}
+<link rel="icon" href="/favicon.ico?v=2" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png?v=2">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
+<link rel="alternate" type="application/rss+xml" title="${esc(SITE.name)} — Blog" href="/feed.xml">
+<meta name="theme-color" content="#f6f1e7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=1">
+${schema}
+</head>`;
+}
+
+const nav = (active = '') => `
+<a class="skip" href="#main">Skip to content</a>
+<nav id="nav" class="scrolled">
+  <div class="wrap nav-in">
+    <a href="/" class="logo">Theon<span>.</span></a>
+    <ul class="links" id="links">
+      <li><a href="/#books">Books</a></li>
+      <li><a href="/blog/"${active === 'blog' ? ' aria-current="page"' : ''}>Blog</a></li>
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#contact">Contact</a></li>
+      <li><a href="/#books" class="btn dark small">Get the books</a></li>
+    </ul>
+    <button class="burger" id="burger" aria-label="Menu"><i></i><i></i><i></i></button>
+  </div>
+</nav>`;
+
+const footer = () => `
+<footer class="site-footer">
+  <div class="wrap foot-grid">
+    <div>
+      <a href="/" class="logo light">Theon<span>.</span></a>
+      <p>${esc(SITE.tagline)}</p>
+      ${socialRow('dark')}
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul><li><a href="/#books">Books</a></li><li><a href="/blog/">Blog</a></li><li><a href="/#about">About Theon</a></li><li><a href="/#contact">Contact</a></li></ul>
+    </div>
+    <div>
+      <h4>Books</h4>
+      <ul>${BOOKS.map((b) => `<li><a href="${amazon(b.asin)}" target="_blank" rel="noopener">${esc(b.short)}</a></li>`).join('')}</ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom"><span>© ${new Date().getFullYear()} Theon Pham</span><span>Written with faith, in two languages.</span></div>
+</footer>
+<script>
+const b=document.getElementById('burger'),l=document.getElementById('links');
+b&&(b.onclick=()=>l.classList.toggle('open'));
+</script>
+</body>
+</html>`;
+
+// ---------- posts ----------
+function loadPosts() {
+  if (!fs.existsSync(CONTENT)) return [];
+  const files = fs.readdirSync(CONTENT).filter((f) => f.endsWith('.json') && !f.startsWith('_'));
+  const posts = [];
+  for (const f of files) {
+    let p;
+    try {
+      p = JSON.parse(fs.readFileSync(path.join(CONTENT, f), 'utf8'));
+    } catch (e) {
+      console.error(`✗ ${f}: invalid JSON — ${e.message}`);
+      process.exitCode = 1;
+      continue;
+    }
+    p.slug = p.slug || f.replace(/\.json$/, '');
+    if (p.status === 'draft') { log(`· skip draft: ${p.slug}`); continue; }
+    p.images = (p.images || []).filter(Boolean);
+    p.url = `${SITE.url}/blog/${p.slug}/`;
+    p.path = `/blog/${p.slug}/`;
+    p.date_modified = p.date_modified || p.date_published;
+    p.words = wordCount(p.body_html || '');
+    p.readMin = Math.max(1, Math.round(p.words / 220));
+    p.cover = p.images[0] || null;
+    posts.push(p);
+  }
+  return posts.sort((a, b) => new Date(b.date_published) - new Date(a.date_published));
+}
+
+function processBody(p) {
+  const toc = [];
+  const used = new Set();
+  let html = p.body_html || '';
+  html = html.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/g, (m, lvl, attrs, inner) => {
+    let id = (attrs.match(/id="([^"]+)"/) || [])[1] || slugify(inner);
+    while (used.has(id)) id += '-2';
+    used.add(id);
+    toc.push({ lvl: +lvl, id, text: stripTags(inner) });
+    return `<h${lvl} id="${id}"${attrs.replace(/\s*id="[^"]*"/, '')}>${inner}</h${lvl}>`;
+  });
+  html = html.replace(/(<p>)?\s*\{\{image:(\d+)\}\}\s*(<\/p>)?/g, (m, a, n) => {
+    const img = p.images[+n - 1];
+    return img ? figure(img) : '';
+  });
+  html = html.replace(/(<p>)?\s*\{\{book:([a-z0-9-]+)\}\}\s*(<\/p>)?/g, (m, a, slug) => bookBox(bookBySlug[slug]));
+  html = html.replace(/(<p>)?\s*\{\{toc\}\}\s*(<\/p>)?/g, () => tocBlock(toc));
+  if (!/id="rank-math-toc"/.test(html) && toc.length > 2) {
+    // insert TOC after the first paragraph, like Rank Math users usually place it
+    html = html.replace(/<\/p>/, '</p>\n' + tocBlock(toc));
+  }
+  // external links open safely
+  html = html.replace(/<a href="(https?:\/\/(?!theonpham\.com)[^"]+)"(?![^>]*target=)/g, '<a href="$1" target="_blank" rel="noopener"');
+  return { html, toc };
+}
+
+const figure = (img, cls = 'wp-block-image size-large', eager = false) => {
+  const credit = img.credit
+    ? ` <span class="credit">Photo: ${img.credit.url ? `<a href="${esc(img.credit.url)}" target="_blank" rel="noopener nofollow">${esc(img.credit.name)}</a>` : esc(img.credit.name)}${img.credit.source ? ` / ${esc(img.credit.source)}` : ''}</span>`
+    : '';
+  const cap = img.caption || credit ? `<figcaption class="wp-element-caption">${esc(img.caption || '')}${credit}</figcaption>` : '';
+  const srcset = img.variants?.sm ? ` srcset="${img.variants.sm} 800w, ${img.file} ${img.width}w" sizes="(max-width: 800px) 100vw, 760px"` : '';
+  return `<figure class="${cls}"><img src="${img.file}"${srcset} alt="${esc(img.alt)}" width="${img.width}" height="${img.height}" ${eager ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"'}>${cap}</figure>`;
+};
+
+const bookBox = (b) =>
+  !b ? '' : `<aside class="book-cta">
+  <a class="book-cta-cover" href="${amazon(b.asin)}" target="_blank" rel="noopener sponsored"><img src="${b.image}" alt="${esc(b.short)} book cover" loading="lazy" onerror="this.parentNode.classList.add('noimg')"><span>${esc(b.short)}</span></a>
+  <div>
+    <span class="eyebrow">From the author</span>
+    <p class="book-cta-title">${esc(b.short)}${b.alt ? ` <em>· ${esc(b.alt)}</em>` : ''}</p>
+    <p>${esc(b.subtitle)}. ${esc(b.blurb)}</p>
+    <a class="btn dark small" href="${amazon(b.asin)}" target="_blank" rel="noopener sponsored">See it on Amazon ↗</a>
+  </div>
+</aside>`;
+
+const tocBlock = (toc) =>
+  !toc.length ? '' : `<div class="wp-block-rank-math-toc-block" id="rank-math-toc"><details open><summary><h2 class="toc-title">Table of Contents</h2></summary><nav><ul>${(() => {
+    let out = '', open = false;
+    toc.forEach((t, i) => {
+      if (t.lvl === 2) {
+        if (open) { out += '</ul></li>'; open = false; }
+        const next = toc[i + 1];
+        out += `<li><a href="#${t.id}">${esc(t.text)}</a>`;
+        if (next && next.lvl === 3) { out += '<ul>'; open = true; } else out += '</li>';
+      } else {
+        out += `<li><a href="#${t.id}">${esc(t.text)}</a></li>`;
+      }
+    });
+    if (open) out += '</ul></li>';
+    return out;
+  })()}</ul></nav></details></div>`;
+
+const faqBlock = (faq = []) =>
+  !faq.length ? '' : `<h2 id="faq">Frequently Asked Questions</h2>
+<div id="rank-math-faq" class="rank-math-block"><div class="rank-math-list">${faq
+    .map((f, i) => `<div id="faq-question-${i + 1}" class="rank-math-list-item"><h3 class="rank-math-question">${esc(f.q)}</h3><div class="rank-math-answer"><p>${f.a}</p></div></div>`)
+    .join('')}</div></div>`;
+
+const authorBox = () => `<div class="author-box" id="author">
+  <img src="${AUTHOR.image}" alt="${esc(AUTHOR.name)}" width="96" height="96" loading="lazy">
+  <div>
+    <span class="eyebrow">Written by</span>
+    <p class="author-name"><a href="/" rel="author">${esc(AUTHOR.name)}</a></p>
+    <p>${esc(AUTHOR.shortBio)} He is the author of ${BOOKS.map((b) => `<a href="${amazon(b.asin)}" target="_blank" rel="noopener"><em>${esc(b.short)}</em></a>`).join(', ').replace(/, ([^,]*)$/, ' and $1')}.</p>
+    ${socialRow()}
+  </div>
+</div>`;
+
+const card = (p) => `<article class="post-card">
+  <a href="${p.path}" class="post-card-img">${p.cover ? `<img src="${p.cover.variants?.sm || p.cover.file}" alt="${esc(p.cover.alt)}" width="800" height="450" loading="lazy">` : `<span class="ph">${esc(p.category || 'Blog')}</span>`}</a>
+  <div class="post-card-body">
+    <span class="eyebrow">${esc(p.category || 'Blog')}</span>
+    <h3><a href="${p.path}">${esc(p.title)}</a></h3>
+    <p>${esc(p.excerpt || p.meta_description || '')}</p>
+    <span class="post-meta"><time datetime="${p.date_published}">${fmtDate(p.date_published)}</time> · ${p.readMin} min read</span>
+  </div>
+</article>`;
+
+function renderPost(p, posts) {
+  const { html, toc } = processBody(p);
+  const title = p.seo_title || p.title;
+  const cover = p.cover;
+  const imgId = p.url + '#primaryimage';
+  const crumbs = [
+    { name: 'Home', url: SITE.url + '/' },
+    { name: 'Blog', url: SITE.url + '/blog/' },
+    { name: p.title, url: p.url },
+  ];
+  const images = cover
+    ? [abs(cover.file), cover.variants?.['4x3'] && abs(cover.variants['4x3']), cover.variants?.['1x1'] && abs(cover.variants['1x1'])].filter(Boolean)
+    : [abs(SITE.defaultImage)];
+  const graph = [
+    personNode(),
+    websiteNode(),
+    cover && { '@type': 'ImageObject', '@id': imgId, url: abs(cover.file), width: cover.width, height: cover.height, caption: cover.alt, inLanguage: SITE.lang },
+    breadcrumbNode(p.url + '#breadcrumb', crumbs),
+    {
+      '@type': 'WebPage',
+      '@id': p.url + '#webpage',
+      url: p.url,
+      name: title,
+      description: p.meta_description,
+      datePublished: p.date_published,
+      dateModified: p.date_modified,
+      isPartOf: { '@id': WEBSITE_ID },
+      primaryImageOfPage: cover ? { '@id': imgId } : undefined,
+      breadcrumb: { '@id': p.url + '#breadcrumb' },
+      inLanguage: SITE.lang,
+    },
+    {
+      '@type': 'BlogPosting',
+      '@id': p.url + '#article',
+      headline: p.title,
+      description: p.meta_description,
+      keywords: [p.focus_keyword, ...(p.tags || [])].filter(Boolean).join(', '),
+      articleSection: p.category,
+      datePublished: p.date_published,
+      dateModified: p.date_modified,
+      author: { '@id': PERSON_ID, name: AUTHOR.name, url: SITE.url + '/' },
+      publisher: { '@id': PERSON_ID },
+      image: images,
+      wordCount: p.words,
+      timeRequired: `PT${p.readMin}M`,
+      name: title,
+      isPartOf: { '@id': p.url + '#webpage' },
+      mainEntityOfPage: { '@id': p.url + '#webpage' },
+      inLanguage: SITE.lang,
+      ...(p.about_books?.length ? { mentions: p.about_books.map((s) => ({ '@id': SITE.url + `/#book-${s}` })) } : {}),
+    },
+    p.faq?.length && {
+      '@type': 'FAQPage',
+      '@id': p.url + '#faq',
+      mainEntity: p.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: stripTags(f.a) } })),
+      isPartOf: { '@id': p.url + '#webpage' },
+    },
+    ...(p.about_books || []).map((s) => bookBySlug[s] && bookNode(bookBySlug[s])),
+  ].filter(Boolean);
+
+  const related = posts.filter((x) => x.slug !== p.slug).slice(0, 3);
+  const extra = `<meta property="article:published_time" content="${p.date_published}">
+<meta property="article:modified_time" content="${p.date_modified}">
+<meta property="og:updated_time" content="${p.date_modified}">
+<meta property="article:section" content="${esc(p.category || 'Blog')}">
+${(p.tags || []).map((t) => `<meta property="article:tag" content="${esc(t)}">`).join('\n')}
+<meta name="author" content="${esc(AUTHOR.name)}">
+<meta name="twitter:label1" content="Written by"><meta name="twitter:data1" content="${esc(AUTHOR.name)}">
+<meta name="twitter:label2" content="Time to read"><meta name="twitter:data2" content="${p.readMin} minutes">
+${cover ? `<link rel="preload" as="image" href="${cover.file}"${cover.variants?.sm ? ` imagesrcset="${cover.variants.sm} 800w, ${cover.file} ${cover.width}w" imagesizes="(max-width: 800px) 100vw, 1000px"` : ''}>` : ''}`;
+
+  return (
+    head({
+      title, description: p.meta_description, canonical: p.url, type: 'article',
+      image: cover ? cover.file : SITE.defaultImage, imageAlt: cover?.alt, imageW: cover?.width || 900, imageH: cover?.height || 1125,
+      extra, schema: ldjson(graph),
+    }) +
+    `<body class="post-template-default single single-post postid-${esc(p.slug)} single-format-standard">` +
+    nav('blog') +
+    `<main id="main" class="site-main">
+  <article id="post-${esc(p.slug)}" class="post type-post status-publish format-standard ${cover ? 'has-post-thumbnail ' : ''}hentry category-${slugify(p.category || 'blog')}">
+    <header class="entry-header wrap-narrow">
+      <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span><a href="/blog/">Blog</a><span class="separator"> » </span><span class="last">${esc(p.title)}</span></p></nav>
+      <a class="entry-cat" href="/blog/">${esc(p.category || 'Blog')}</a>
+      <h1 class="entry-title">${esc(p.title)}</h1>
+      ${p.excerpt ? `<p class="entry-excerpt">${esc(p.excerpt)}</p>` : ''}
+      <div class="entry-meta">
+        <img src="${AUTHOR.image}" alt="" width="40" height="40" class="avatar">
+        <span class="byline">By <span class="author vcard"><a class="url fn n" href="/" rel="author">${esc(AUTHOR.name)}</a></span></span>
+        <span class="sep">·</span>
+        <span class="posted-on"><time class="entry-date published" datetime="${p.date_published}">${fmtDate(p.date_published)}</time>${p.date_modified !== p.date_published ? ` <span class="updated-label">Updated <time class="updated" datetime="${p.date_modified}">${fmtDate(p.date_modified)}</time></span>` : ''}</span>
+        <span class="sep">·</span>
+        <span class="reading-time">${p.readMin} min read</span>
+      </div>
+    </header>
+    ${cover ? `<div class="post-thumbnail wrap-wide">${figure(cover, 'wp-block-post-featured-image', true)}</div>` : ''}
+    <div class="entry-content wrap-narrow">
+${html}
+${faqBlock(p.faq)}
+    </div>
+    <footer class="entry-footer wrap-narrow">
+      ${p.tags?.length ? `<div class="tags-links"><span>Tags:</span> ${p.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>` : ''}
+      ${authorBox()}
+    </footer>
+  </article>
+  ${related.length ? `<section class="related wrap"><h2>Keep reading</h2><div class="post-grid">${related.map(card).join('')}</div></section>` : ''}
+</main>` +
+    footer()
+  );
+}
+
+function renderBlogIndex(posts) {
+  const url = SITE.url + '/blog/';
+  const graph = [
+    personNode(), websiteNode(),
+    breadcrumbNode(url + '#breadcrumb', [{ name: 'Home', url: SITE.url + '/' }, { name: 'Blog', url }]),
+    {
+      '@type': 'CollectionPage', '@id': url + '#webpage', url, name: 'Blog — Theon Pham',
+      description: 'Notes on learning Spanish, faith, love and growing up by bilingual author Theon Pham.',
+      isPartOf: { '@id': WEBSITE_ID }, breadcrumb: { '@id': url + '#breadcrumb' }, inLanguage: SITE.lang,
+      mainEntity: { '@type': 'ItemList', itemListElement: posts.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: p.url, name: p.title })) },
+    },
+  ];
+  return (
+    head({
+      title: 'Blog — Learning Spanish, Faith & Growing Up | Theon Pham',
+      description: 'Gentle, practical notes on learning Spanish, faith, love and growing up from bilingual author Theon Pham.',
+      canonical: url, image: posts[0]?.cover?.file || SITE.defaultImage, imageW: posts[0]?.cover?.width || 900, imageH: posts[0]?.cover?.height || 1125,
+      schema: ldjson(graph),
+    }) +
+    `<body class="blog">` + nav('blog') +
+    `<main id="main" class="site-main">
+  <header class="page-head wrap">
+    <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span><span class="last">Blog</span></p></nav>
+    <span class="eyebrow">The Blog</span>
+    <h1>Notes on <em>Spanish</em>, faith &amp; growing up</h1>
+    <p>Short, honest writing from the same quiet place my books come from.</p>
+  </header>
+  <section class="wrap">${posts.length ? `<div class="post-grid">${posts.map(card).join('')}</div>` : '<p class="empty">New articles are coming soon.</p>'}</section>
+</main>` + footer()
+  );
+}
+
+// ---------- home ----------
+function renderHome(posts) {
+  let html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const graph = [
+    personNode(),
+    websiteNode(),
+    {
+      '@type': 'ProfilePage', '@id': SITE.url + '/#webpage', url: SITE.url + '/', name: 'Theon Pham — Bilingual Author',
+      description: SITE.description, mainEntity: { '@id': PERSON_ID }, about: { '@id': PERSON_ID }, isPartOf: { '@id': WEBSITE_ID },
+      ...(posts[0] ? { dateModified: posts[0].date_modified } : {}),
+      primaryImageOfPage: { '@id': SITE.url + '/#personimage' }, inLanguage: SITE.lang,
+    },
+    ...BOOKS.map(bookNode),
+  ];
+  html = html.replace('<!--SCHEMA-->', ldjson(graph));
+  const latest = posts.slice(0, 3);
+  html = html.replace(
+    /<!--LATEST_POSTS-->[\s\S]*?<!--\/LATEST_POSTS-->/,
+    latest.length
+      ? `<section id="blog" class="home-blog"><div class="wrap"><div class="books-head rv"><div><div class="eyebrow">From the blog</div><h2 style="margin-top:1rem">Notes on <em>Spanish</em> &amp; faith</h2></div><p><a href="/blog/" class="btn ghost">All articles →</a></p></div><div class="post-grid">${latest.map(card).join('')}</div></div></section>`
+      : ''
+  );
+  return html;
+}
+
+// ---------- feeds ----------
+function sitemap(posts) {
+  const urls = [
+    { loc: SITE.url + '/', lastmod: posts[0]?.date_modified },
+    { loc: SITE.url + '/blog/', lastmod: posts[0]?.date_modified },
+    ...posts.map((p) => ({ loc: p.url, lastmod: p.date_modified, images: p.images })),
+  ];
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+${urls.map((u) => `  <url><loc>${u.loc}</loc>${u.lastmod ? `<lastmod>${new Date(u.lastmod).toISOString()}</lastmod>` : ''}${(u.images || []).map((i) => `<image:image><image:loc>${abs(i.file)}</image:loc></image:image>`).join('')}</url>`).join('\n')}
+</urlset>
+`;
+}
+const robots = () => `User-agent: *
+Allow: /
+Disallow: /content/
+Disallow: /tools/
+
+Sitemap: ${SITE.url}/sitemap.xml
+`;
+function feed(posts) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+<channel>
+<title>${esc(SITE.name)} — Blog</title>
+<link>${SITE.url}/blog/</link>
+<atom:link href="${SITE.url}/feed.xml" rel="self" type="application/rss+xml"/>
+<description>${esc(SITE.description)}</description>
+<language>${SITE.lang}</language>
+${posts.slice(0, 20).map((p) => `<item><title>${esc(p.title)}</title><link>${p.url}</link><guid>${p.url}</guid><pubDate>${new Date(p.date_published).toUTCString()}</pubDate><description>${esc(p.meta_description)}</description>${p.cover ? `<media:content url="${abs(p.cover.file)}" medium="image" width="${p.cover.width}" height="${p.cover.height}"/>` : ''}</item>`).join('\n')}
+</channel>
+</rss>
+`;
+}
+const notFound = () =>
+  head({ title: 'Page not found | Theon Pham', description: 'This page could not be found.', canonical: SITE.url + '/404.html', image: SITE.defaultImage })
+    .replace('index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large', 'noindex, follow') +
+  `<body>` + nav() + `<main id="main" class="site-main"><section class="page-head wrap" style="min-height:50vh"><span class="eyebrow">404</span><h1>This page has <em>wandered off</em>.</h1><p>Try the <a href="/blog/">blog</a> or go back <a href="/">home</a>.</p></section></main>` + footer();
+
+// ---------- SEO checks (Rank Math style) ----------
+function seoReport(p) {
+  const issues = [];
+  const kw = (p.focus_keyword || '').toLowerCase();
+  const t = p.seo_title || p.title;
+  if (!kw) issues.push('no focus_keyword');
+  else {
+    if (!t.toLowerCase().includes(kw)) issues.push('focus keyword missing from SEO title');
+    if (!(p.meta_description || '').toLowerCase().includes(kw)) issues.push('focus keyword missing from meta description');
+    if (!p.slug.includes(slugify(kw).split('-').slice(0, 3).join('-'))) issues.push('focus keyword not in URL slug');
+    const firstP = (p.body_html.match(/<p>([\s\S]*?)<\/p>/) || [])[1] || '';
+    if (!firstP.toLowerCase().includes(kw)) issues.push('focus keyword not in first paragraph');
+    if (!/<h2[^>]*>[^<]*?/i.test(p.body_html) || !new RegExp(`<h[23][^>]*>[^<]*${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'i').test(p.body_html)) issues.push('focus keyword not in any H2/H3');
+  }
+  if (t.length > 60) issues.push(`SEO title ${t.length} chars (aim ≤ 60)`);
+  const d = (p.meta_description || '').length;
+  if (d < 120 || d > 160) issues.push(`meta description ${d} chars (aim 120–160)`);
+  if (p.words < 900) issues.push(`only ${p.words} words`);
+  if (p.images.length < 3) issues.push(`${p.images.length}/3 images — run: npm run images ${p.slug}`);
+  if (p.images.some((i) => !i.alt)) issues.push('image without alt text');
+  if (!/<a href="\/(?!\/)/.test(p.body_html) && !/\{\{book:/.test(p.body_html)) issues.push('no internal link');
+  if (!/<a href="https?:\/\/(?!theonpham)/.test(p.body_html)) issues.push('no external (outbound) link');
+  return issues;
+}
+
+// ---------- run ----------
+fs.rmSync(OUT, { recursive: true, force: true });
+fs.mkdirSync(OUT, { recursive: true });
+const posts = loadPosts();
+
+write('index.html', renderHome(posts));
+write('blog/index.html', renderBlogIndex(posts));
+for (const p of posts) write(`blog/${p.slug}/index.html`, renderPost(p, posts));
+write('sitemap.xml', sitemap(posts));
+write('robots.txt', robots());
+write('feed.xml', feed(posts));
+write('404.html', notFound());
+copyDir(path.join(ROOT, 'assets'), path.join(OUT, 'assets'));
+copyDir(path.join(ROOT, 'img'), path.join(OUT, 'img'));
+for (const f of ['favicon.ico', 'CNAME']) if (fs.existsSync(path.join(ROOT, f))) fs.copyFileSync(path.join(ROOT, f), path.join(OUT, f));
+fs.writeFileSync(path.join(OUT, '.nojekyll'), '');
+
+log(`✓ Built ${posts.length} post(s) → _site/`);
+for (const p of posts) {
+  const issues = seoReport(p);
+  log(issues.length ? `  ⚠ ${p.slug}\n     - ${issues.join('\n     - ')}` : `  ✓ ${p.slug}: SEO checks passed`);
+}
