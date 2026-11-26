@@ -68,4 +68,17 @@ Writing rules used for every post: focus keyword in SEO title, meta description,
 at least one H2/H3; ≥ 900 words; one internal link and one outbound link to a reputable source; Spanish
 examples wrapped in `<span class="es">`; Scripture quoted from the World English Bible with reference.
 
+## Topic clusters
+
+`content/_clusters.json` holds the cluster map: one pillar slug + groups of planned cluster posts
+(slug, title, focus keyword, intent, suggested book). The build then automatically:
+- adds an "Explore the complete guide" block to the pillar (only published posts are listed; put `{{cluster}}` where you want it, otherwise it's appended)
+- adds `hasPart` (pillar) / `isPartOf` (cluster post) to the BlogPosting schema
+- gives cluster posts the breadcrumb Home » Blog » <cluster name> » Post, a "Part of the guide" note and a "More from this guide" box
+- prefers sibling posts in "Keep reading", and shows the guide at the top of /blog/
+- warns when a cluster post has no contextual link to its pillar, and prints cluster progress + the next posts to write
+
+Link to any post with `{{link:slug|anchor text}}`. If that post isn't published yet, the anchor shows as plain text
+and becomes a real link automatically on the build after it goes live — so pillars can link to planned posts today.
+
 Book and author data (schema, author box, social links) live in `tools/site.config.mjs`. The homepage is the author profile (ProfilePage + Person schema); author links point to `/`.

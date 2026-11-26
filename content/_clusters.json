@@ -1,0 +1,158 @@
+{
+  "clusters": [
+    {
+      "id": "bilingual-english-spanish",
+      "name": "Bilingual English & Spanish",
+      "pillar": "bilingual-english-and-spanish",
+      "description": "Everything about learning and living between English and Spanish: bilingual reading, smart methods, the differences that trip learners up, and bilingual life.",
+      "groups": [
+        {
+          "name": "Bilingual reading & books",
+          "posts": [
+            {
+              "slug": "bilingual-books-english-spanish",
+              "title": "How to Use Bilingual Books (English–Spanish) to Actually Learn",
+              "focus_keyword": "bilingual books english spanish",
+              "intent": "informational / commercial",
+              "book": "a-road-in-bloom"
+            },
+            {
+              "slug": "parallel-text-reading",
+              "title": "Parallel Text Reading: Learn Spanish with Side-by-Side Pages",
+              "focus_keyword": "parallel text",
+              "intent": "informational",
+              "book": "love-slowly"
+            },
+            {
+              "slug": "bilingual-books-for-adults",
+              "title": "Bilingual Books for Adults: What to Look For (and Avoid)",
+              "focus_keyword": "bilingual books for adults",
+              "intent": "commercial",
+              "book": "the-mind-lies"
+            },
+            {
+              "slug": "reading-in-spanish-for-beginners",
+              "title": "Reading in Spanish for Beginners: Where to Start",
+              "focus_keyword": "reading in spanish for beginners",
+              "intent": "informational",
+              "book": "a-road-in-bloom"
+            }
+          ]
+        },
+        {
+          "name": "How to learn",
+          "posts": [
+            {
+              "slug": "how-to-learn-spanish",
+              "title": "How to Learn Spanish as an Adult: A Gentle, Realistic Guide",
+              "focus_keyword": "how to learn spanish",
+              "intent": "informational",
+              "book": "a-road-in-bloom"
+            },
+            {
+              "slug": "comprehensible-input-spanish",
+              "title": "Comprehensible Input for Spanish: A Plain-English Guide",
+              "focus_keyword": "comprehensible input spanish",
+              "intent": "informational",
+              "book": "a-road-in-bloom"
+            },
+            {
+              "slug": "sentence-mining-spanish",
+              "title": "Sentence Mining in Spanish: Learn Words the Way They Live",
+              "focus_keyword": "sentence mining spanish",
+              "intent": "informational",
+              "book": "love-slowly"
+            },
+            {
+              "slug": "code-switching-english-spanish",
+              "title": "Code-Switching Between English and Spanish (and Why Spanglish Is OK)",
+              "focus_keyword": "code switching english spanish",
+              "intent": "informational",
+              "book": "a-road-in-bloom"
+            }
+          ]
+        },
+        {
+          "name": "English vs Spanish: the tricky parts",
+          "posts": [
+            {
+              "slug": "spanish-false-friends",
+              "title": "Spanish False Friends: 30 Words That Don’t Mean What You Think",
+              "focus_keyword": "spanish false friends",
+              "intent": "informational",
+              "book": "the-mind-lies"
+            },
+            {
+              "slug": "english-spanish-cognates",
+              "title": "English–Spanish Cognates: The Shortcut to a Bigger Vocabulary",
+              "focus_keyword": "english spanish cognates",
+              "intent": "informational",
+              "book": "a-road-in-bloom"
+            },
+            {
+              "slug": "ser-vs-estar",
+              "title": "Ser vs Estar: A Simple Way to Finally Get It",
+              "focus_keyword": "ser vs estar",
+              "intent": "informational",
+              "book": "the-mind-lies"
+            },
+            {
+              "slug": "te-quiero-vs-te-amo",
+              "title": "Te Quiero vs Te Amo: How to Say “I Love You” in Spanish",
+              "focus_keyword": "te quiero vs te amo",
+              "intent": "informational",
+              "book": "love-slowly"
+            },
+            {
+              "slug": "latin-american-vs-spain-spanish",
+              "title": "Latin American vs Spain Spanish: Which Should You Learn?",
+              "focus_keyword": "latin american spanish vs spain spanish",
+              "intent": "informational",
+              "book": "a-road-in-bloom"
+            }
+          ]
+        },
+        {
+          "name": "Bilingual life",
+          "posts": [
+            {
+              "slug": "benefits-of-being-bilingual",
+              "title": "The Real Benefits of Being Bilingual in English and Spanish",
+              "focus_keyword": "benefits of being bilingual",
+              "intent": "informational",
+              "book": "the-mind-lies"
+            },
+            {
+              "slug": "raising-bilingual-children-english-spanish",
+              "title": "Raising Bilingual Children in English and Spanish at Home",
+              "focus_keyword": "raising bilingual children",
+              "intent": "informational",
+              "book": "a-road-in-bloom"
+            },
+            {
+              "slug": "heritage-spanish-speakers",
+              "title": "For Heritage Spanish Speakers: Reclaiming the Language You Grew Up With",
+              "focus_keyword": "heritage spanish speakers",
+              "intent": "informational",
+              "book": "love-slowly"
+            },
+            {
+              "slug": "spanish-words-with-no-english-translation",
+              "title": "Beautiful Spanish Words With No English Translation",
+              "focus_keyword": "spanish words with no english translation",
+              "intent": "informational",
+              "book": "the-mind-lies"
+            },
+            {
+              "slug": "bilingual-bible-english-spanish",
+              "title": "Reading a Bilingual Bible in English and Spanish",
+              "focus_keyword": "bilingual bible english spanish",
+              "intent": "informational / commercial",
+              "book": "god-and-you"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -213,10 +213,51 @@ function loadPosts() {
   return posts.sort((a, b) => new Date(b.date_published) - new Date(a.date_published));
 }
 
+// ---------- topic clusters ----------
+// content/_clusters.json defines pillar + cluster posts. Planned posts become links automatically once published.
+let POSTS_BY_SLUG = {};
+function loadClusters(posts) {
+  const f = path.join(CONTENT, '_clusters.json');
+  if (!fs.existsSync(f)) return [];
+  let clusters = [];
+  try { clusters = JSON.parse(fs.readFileSync(f, 'utf8')).clusters || []; }
+  catch (e) { console.error(`✗ _clusters.json: invalid JSON — ${e.message}`); process.exitCode = 1; return []; }
+  for (const c of clusters) {
+    c.pillarPost = POSTS_BY_SLUG[c.pillar] || null;
+    for (const g of c.groups) for (const it of g.posts) it.post = POSTS_BY_SLUG[it.slug] || null;
+    c.items = c.groups.flatMap((g) => g.posts);
+    c.published = c.items.filter((i) => i.post).map((i) => i.post);
+  }
+  for (const p of posts) {
+    const c = clusters.find((c) => c.pillar === p.slug || c.items.some((i) => i.slug === p.slug));
+    if (c) { p.cluster = c; p.isPillar = c.pillar === p.slug; }
+  }
+  return clusters;
+}
+
+const clusterBlock = (c) => {
+  const groups = c.groups.map((g) => ({ ...g, live: g.posts.filter((i) => i.post) })).filter((g) => g.live.length);
+  if (!groups.length) return '';
+  return `<section class="cluster-map" id="the-complete-guide"><h2>Explore the complete guide</h2>
+<p>Each article below goes deeper into one topic from this guide. Start wherever you are.</p>
+${groups.map((g) => `<h3>${esc(g.name)}</h3><ul class="cluster-list">${g.live.map((i) => `<li><a href="${i.post.path}">${esc(i.post.title)}</a><span>${esc(i.post.excerpt || '')}</span></li>`).join('')}</ul>`).join('\n')}
+</section>`;
+};
+
 function processBody(p) {
   const toc = [];
   const used = new Set();
   let html = p.body_html || '';
+  if (p.isPillar) {
+    const block = clusterBlock(p.cluster);
+    html = /\{\{cluster\}\}/.test(html) ? html.replace(/(<p>)?\s*\{\{cluster\}\}\s*(<\/p>)?/g, block) : html + '\n' + block;
+  } else html = html.replace(/(<p>)?\s*\{\{cluster\}\}\s*(<\/p>)?/g, '');
+  // {{link:slug|anchor text}} → link if that post is published, plain text until then
+  html = html.replace(/\{\{link:([a-z0-9-]+)(?:\|([^}]+))?\}\}/g, (m, slug, text) => {
+    const t = POSTS_BY_SLUG[slug];
+    const label = text || (t ? t.title : slug.replace(/-/g, ' '));
+    return t && t.slug !== p.slug ? `<a href="${t.path}">${label}</a>` : label;
+  });
   html = html.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/g, (m, lvl, attrs, inner) => {
     let id = (attrs.match(/id="([^"]+)"/) || [])[1] || slugify(inner);
     while (used.has(id)) id += '-2';
@@ -244,7 +285,7 @@ const figure = (img, cls = 'wp-block-image size-large', eager = false) => {
     ? ` <span class="credit">Photo: ${img.credit.url ? `<a href="${esc(img.credit.url)}" target="_blank" rel="noopener nofollow">${esc(img.credit.name)}</a>` : esc(img.credit.name)}${img.credit.source ? ` / ${esc(img.credit.source)}` : ''}</span>`
     : '';
   const cap = img.caption || credit ? `<figcaption class="wp-element-caption">${esc(img.caption || '')}${credit}</figcaption>` : '';
-  const srcset = img.variants?.sm ? ` srcset="${img.variants.sm} 800w, ${img.file} ${img.width}w" sizes="(max-width: 800px) 100vw, 760px"` : '';
+  const srcset = img.variants?.sm ? ` srcset="${img.variants.sm} 800w, ${img.file} ${img.width}w" sizes="${eager ? '(max-width: 1000px) 94vw, 1000px' : '(max-width: 800px) 90vw, 760px'}"` : '';
   return `<figure class="${cls}"><img src="${img.file}"${srcset} alt="${esc(img.alt)}" width="${img.width}" height="${img.height}" ${eager ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"'}>${cap}</figure>`;
 };
 
@@ -307,9 +348,11 @@ function renderPost(p, posts) {
   const title = p.seo_title || p.title;
   const cover = p.cover;
   const imgId = p.url + '#primaryimage';
+  const pillar = p.cluster && !p.isPillar ? p.cluster.pillarPost : null;
   const crumbs = [
     { name: 'Home', url: SITE.url + '/' },
     { name: 'Blog', url: SITE.url + '/blog/' },
+    ...(pillar ? [{ name: p.cluster.name, url: pillar.url }] : []),
     { name: p.title, url: p.url },
   ];
   const images = cover
@@ -348,9 +391,10 @@ function renderPost(p, posts) {
       wordCount: p.words,
       timeRequired: `PT${p.readMin}M`,
       name: title,
-      isPartOf: { '@id': p.url + '#webpage' },
+      isPartOf: pillar ? [{ '@id': p.url + '#webpage' }, { '@id': pillar.url + '#article' }] : { '@id': p.url + '#webpage' },
       mainEntityOfPage: { '@id': p.url + '#webpage' },
       inLanguage: SITE.lang,
+      ...(p.isPillar && p.cluster.published.length ? { hasPart: p.cluster.published.map((x) => ({ '@type': 'BlogPosting', '@id': x.url + '#article', url: x.url, headline: x.title })) } : {}),
       ...(p.about_books?.length ? { mentions: p.about_books.map((s) => ({ '@id': SITE.url + `/#book-${s}` })) } : {}),
     },
     p.faq?.length && {
@@ -362,7 +406,12 @@ function renderPost(p, posts) {
     ...(p.about_books || []).map((s) => bookBySlug[s] && bookNode(bookBySlug[s])),
   ].filter(Boolean);
 
-  const related = posts.filter((x) => x.slug !== p.slug).slice(0, 3);
+  const siblings = p.cluster ? [p.cluster.pillarPost, ...p.cluster.published].filter((x) => x && x.slug !== p.slug) : [];
+  const related = [...siblings, ...posts.filter((x) => x.slug !== p.slug && !siblings.includes(x))].slice(0, 3);
+  const seriesNote = pillar ? `<p class="series-note">Part of the guide: <a href="${pillar.path}">${esc(pillar.title)}</a></p>` : '';
+  const moreInGuide = pillar
+    ? `<aside class="more-guide"><span class="eyebrow">${esc(p.cluster.name)}</span><p class="more-guide-title">More from this guide</p><ul>${[pillar, ...p.cluster.published.filter((x) => x.slug !== p.slug)].slice(0, 7).map((x) => `<li><a href="${x.path}">${esc(x.title)}</a>${x === pillar ? ' <em>(start here)</em>' : ''}</li>`).join('')}</ul></aside>`
+    : '';
   const extra = `<meta property="article:published_time" content="${p.date_published}">
 <meta property="article:modified_time" content="${p.date_modified}">
 <meta property="og:updated_time" content="${p.date_modified}">
@@ -384,7 +433,7 @@ ${cover ? `<link rel="preload" as="image" href="${cover.file}"${cover.variants?.
     `<main id="main" class="site-main">
   <article id="post-${esc(p.slug)}" class="post type-post status-publish format-standard ${cover ? 'has-post-thumbnail ' : ''}category-${slugify(p.category || 'blog')}">
     <header class="entry-header wrap-narrow">
-      <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span><a href="/blog/">Blog</a><span class="separator"> » </span><span class="last">${esc(p.title)}</span></p></nav>
+      <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span><a href="/blog/">Blog</a><span class="separator"> » </span>${pillar ? `<a href="${pillar.path}">${esc(p.cluster.name)}</a><span class="separator"> » </span>` : ''}<span class="last">${esc(p.title)}</span></p></nav>
       <h1 class="entry-title">${esc(p.title)}</h1>
       ${p.excerpt ? `<p class="entry-excerpt">${esc(p.excerpt)}</p>` : ''}
       <div class="entry-meta">
@@ -398,7 +447,9 @@ ${cover ? `<link rel="preload" as="image" href="${cover.file}"${cover.variants?.
     </header>
     ${cover ? `<div class="post-thumbnail wrap-wide">${figure(cover, 'wp-block-post-featured-image', true)}</div>` : ''}
     <div class="entry-content wrap-narrow">
+${seriesNote}
 ${html}
+${moreInGuide}
 ${faqBlock(p.faq)}
     </div>
     <footer class="entry-footer wrap-narrow">
@@ -412,7 +463,14 @@ ${faqBlock(p.faq)}
   );
 }
 
-function renderBlogIndex(posts) {
+function renderBlogIndex(posts, clusters = []) {
+  const guides = clusters.filter((c) => c.pillarPost).map((c) => `<section class="wrap guide-band">
+    <a class="guide-feature${c.pillarPost.cover ? '' : ' no-img'}" href="${c.pillarPost.path}">
+      ${c.pillarPost.cover ? `<img src="${c.pillarPost.cover.variants?.sm || c.pillarPost.cover.file}" alt="${esc(c.pillarPost.cover.alt)}" width="800" height="450" loading="lazy">` : ''}
+      <span class="guide-body"><span class="eyebrow">Complete guide · ${c.published.length + 1} article${c.published.length ? 's' : ''}</span><strong>${esc(c.pillarPost.title)}</strong><span>${esc(c.description)}</span><span class="guide-cta">Start the guide →</span></span>
+    </a>
+    ${c.published.length ? `<ul class="guide-list">${c.published.slice(0, 8).map((x) => `<li><a href="${x.path}">${esc(x.title)}</a></li>`).join('')}</ul>` : ''}
+  </section>`).join('');
   const url = SITE.url + '/blog/';
   const graph = [
     personNode(), websiteNode(),
@@ -439,7 +497,8 @@ function renderBlogIndex(posts) {
     <h1>Notes on <em>Spanish</em>, faith &amp; growing up</h1>
     <p>Short, honest writing from the same quiet place my books come from.</p>
   </header>
-  <section class="wrap">${posts.length ? `<div class="post-grid">${posts.map(card).join('')}</div>` : '<p class="empty">New articles are coming soon.</p>'}</section>
+  ${guides}
+  <section class="wrap">${guides ? '<h2 class="latest-title">Latest articles</h2>' : ''}${posts.length ? `<div class="post-grid">${posts.map(card).join('')}</div>` : '<p class="empty">New articles are coming soon.</p>'}</section>
 </main>` + footer()
   );
 }
@@ -528,7 +587,9 @@ function seoReport(p) {
   if (p.words < 900) issues.push(`only ${p.words} words`);
   if (p.images.length < 3) issues.push(`${p.images.length}/3 images — run: npm run images ${p.slug}`);
   if (p.images.some((i) => !i.alt)) issues.push('image without alt text');
-  if (!/<a href="\/(?!\/)/.test(p.body_html) && !/\{\{book:/.test(p.body_html)) issues.push('no internal link');
+  if (!/<a href="\/(?!\/)/.test(p.body_html) && !/\{\{book:/.test(p.body_html) && !/\{\{link:/.test(p.body_html)) issues.push('no internal link');
+  if (p.cluster && !p.isPillar && p.cluster.pillarPost && !new RegExp(`\\{\\{link:${p.cluster.pillar}[|}]|href="/blog/${p.cluster.pillar}/"`).test(p.body_html))
+    issues.push(`no contextual link to the pillar — add {{link:${p.cluster.pillar}|…}} in the text`);
   if (!/<a href="https?:\/\/(?!theonpham)/.test(p.body_html)) issues.push('no external (outbound) link');
   return issues;
 }
@@ -537,9 +598,11 @@ function seoReport(p) {
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 const posts = loadPosts();
+POSTS_BY_SLUG = Object.fromEntries(posts.map((p) => [p.slug, p]));
+const clusters = loadClusters(posts);
 
 write('index.html', renderHome(posts));
-write('blog/index.html', renderBlogIndex(posts));
+write('blog/index.html', renderBlogIndex(posts, clusters));
 for (const p of posts) write(`blog/${p.slug}/index.html`, renderPost(p, posts));
 write('sitemap.xml', sitemap(posts));
 write('robots.txt', robots());
@@ -554,4 +617,8 @@ log(`✓ Built ${posts.length} post(s) → _site/`);
 for (const p of posts) {
   const issues = seoReport(p);
   log(issues.length ? `  ⚠ ${p.slug}\n     - ${issues.join('\n     - ')}` : `  ✓ ${p.slug}: SEO checks passed`);
+}
+for (const c of clusters) {
+  const next = c.items.filter((i) => !i.post).slice(0, 3).map((i) => i.slug);
+  log(`\n◆ Cluster "${c.name}": pillar ${c.pillarPost ? '✓' : '✗ (not published yet)'} · ${c.published.length}/${c.items.length} cluster posts live${next.length ? `\n  next up: ${next.join(', ')}` : ' · complete!'}`);
 }
