@@ -309,3 +309,4 @@ a.pager-num:hover{border-color:var(--line);background:rgba(255,255,255,.6)}
 .quiz-ans summary{cursor:pointer;color:var(--gold-ink);font-size:.85rem}
 .quiz-ans p{margin:.5rem 0 0!important;color:var(--ink-2)}
 .quiz-score{font-family:var(--serif);font-size:1.35rem!important;color:var(--ink);margin-top:.8rem!important}
+

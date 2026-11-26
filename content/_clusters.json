@@ -85,7 +85,7 @@
           "posts": [
             {
               "slug": "spanish-false-friends",
-              "title": "Spanish False Friends: 30 Words That Fool English Speakers",
+              "title": "Spanish False Friends: 30 Words That Fool Learners",
               "focus_keyword": "spanish false friends",
               "intent": "informational",
               "book": "the-mind-lies",
@@ -210,26 +210,26 @@
             {
               "slug": "long-distance-relationship-spanish",
               "title": "Long-distance love messages",
-              "focus_keyword": "long distance relationship messages in spanish",
+              "focus_keyword": "long distance relationship in spanish",
               "priority": "P2",
               "book": "love-slowly",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "apologizing-to-your-partner-in-spanish",
               "title": "Apologizing to your partner",
-              "focus_keyword": "how to apologize to your partner in spanish",
+              "focus_keyword": "apologizing to your partner in spanish",
               "priority": "P2",
               "book": "love-slowly",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "love-letter-in-spanish",
               "title": "Writing a love letter",
-              "focus_keyword": "how to write a love letter in spanish",
+              "focus_keyword": "love letter in spanish",
               "priority": "P2",
               "book": "love-slowly",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "how-to-say-i-miss-you-in-spanish",
@@ -274,7 +274,7 @@
               "focus_keyword": "how to compliment food in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "spanish-wedding-phrases",
@@ -282,7 +282,7 @@
               "focus_keyword": "spanish wedding phrases",
               "priority": "P2",
               "book": "love-slowly",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "talking-to-kids-in-spanish",
@@ -290,7 +290,7 @@
               "focus_keyword": "talking to kids in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "video-calls-with-family-in-spanish",
@@ -351,7 +351,7 @@
               "focus_keyword": "congratulations in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "get-well-soon-in-spanish",
@@ -359,7 +359,7 @@
               "focus_keyword": "get well soon in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "how-to-apologize-in-spanish",
@@ -367,7 +367,7 @@
               "focus_keyword": "how to apologize in spanish",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "ways-to-say-thank-you-in-spanish",
@@ -401,10 +401,10 @@
             {
               "slug": "making-friends-in-spanish",
               "title": "Making friends",
-              "focus_keyword": "how to make friends in spanish",
+              "focus_keyword": "making friends in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "phone-calls-in-spanish",
@@ -412,7 +412,7 @@
               "focus_keyword": "phone calls in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "ordering-food-in-spanish",
@@ -420,15 +420,15 @@
               "focus_keyword": "ordering food in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "at-the-doctor-in-spanish",
               "title": "At the doctor (as a patient)",
-              "focus_keyword": "spanish phrases at the doctor",
+              "focus_keyword": "at the doctor in spanish",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "grocery-shopping-in-spanish",
@@ -465,7 +465,7 @@
               "focus_keyword": "talking to coworkers in spanish",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "job-interview-in-spanish",
@@ -473,7 +473,7 @@
               "focus_keyword": "job interview in spanish",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "polite-requests-in-spanish",
@@ -481,15 +481,15 @@
               "focus_keyword": "polite requests in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "disagreeing-politely-in-spanish",
               "title": "Disagreeing politely",
-              "focus_keyword": "how to disagree politely in spanish",
+              "focus_keyword": "disagreeing politely in spanish",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "spanish-for-online-meetings",
@@ -510,7 +510,7 @@
               "focus_keyword": "emergency phrases in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "at-the-airport-in-spanish",
@@ -562,7 +562,7 @@
       "pillar": "spanish-confusing-words",
       "pillar_title": "Spanish Confusing Words: The Complete List",
       "pillar_focus_keyword": "spanish confusing words",
-      "description": "Pairs of Spanish words English speakers mix up, each with a rule, real conversations and an interactive quiz.",
+      "description": "Pairs of Spanish words that learners mix up, each with a simple rule, real conversations and an interactive quiz.",
       "groups": [
         {
           "name": "Verb pairs",
@@ -645,7 +645,7 @@
               "focus_keyword": "saber vs conocer",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "tener-vs-haber",
@@ -653,7 +653,7 @@
               "focus_keyword": "tener vs haber",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "poder-vs-saber",
@@ -661,7 +661,7 @@
               "focus_keyword": "poder vs saber",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "decir-vs-hablar",
@@ -669,7 +669,7 @@
               "focus_keyword": "decir vs hablar",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "volver-vs-devolver",
@@ -677,7 +677,7 @@
               "focus_keyword": "volver vs devolver",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             }
           ]
         },
@@ -695,26 +695,26 @@
             {
               "slug": "tu-vs-usted",
               "title": "Tú vs usted",
-              "focus_keyword": "tu vs usted",
+              "focus_keyword": "tú vs usted",
               "priority": "P2",
               "book": "love-slowly",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "que-vs-cual",
               "title": "Qué vs cuál",
-              "focus_keyword": "que vs cual",
+              "focus_keyword": "qué vs cuál",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "porque-vs-por-que",
               "title": "Porque, por qué, porqué",
-              "focus_keyword": "porque vs por que",
+              "focus_keyword": "porque vs por qué",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "este-ese-aquel",
@@ -722,15 +722,15 @@
               "focus_keyword": "este ese aquel",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "aqui-vs-aca",
               "title": "Aquí vs acá",
-              "focus_keyword": "aqui vs aca",
+              "focus_keyword": "aquí vs acá",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "lo-vs-le",
@@ -738,7 +738,7 @@
               "focus_keyword": "lo vs le",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "por-vs-para",
@@ -791,23 +791,23 @@
               "focus_keyword": "malo vs mal",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "tambien-vs-tampoco",
               "title": "También vs tampoco",
-              "focus_keyword": "tambien vs tampoco",
+              "focus_keyword": "también vs tampoco",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "ya-vs-todavia",
               "title": "Ya vs todavía",
-              "focus_keyword": "ya vs todavia",
+              "focus_keyword": "ya vs todavía",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "bastante-vs-suficiente",
@@ -825,10 +825,10 @@
             {
               "slug": "si-vs-si",
               "title": "Si vs sí",
-              "focus_keyword": "si vs si spanish",
+              "focus_keyword": "si vs sí",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "tu-vs-tu",
@@ -836,7 +836,7 @@
               "focus_keyword": "tu vs tú",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "esta-vs-esta",
@@ -844,7 +844,7 @@
               "focus_keyword": "esta vs está",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "hecho-vs-echo",
@@ -852,7 +852,7 @@
               "focus_keyword": "hecho vs echo",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "haber-vs-a-ver",
@@ -860,7 +860,7 @@
               "focus_keyword": "haber vs a ver",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "el-vs-el",
@@ -892,11 +892,11 @@
     },
     {
       "id": "spanish-mistakes",
-      "name": "Spanish Mistakes English Speakers Make",
-      "pillar": "spanish-mistakes-english-speakers-make",
-      "pillar_title": "Spanish Mistakes English Speakers Make (and How to Fix Them)",
-      "pillar_focus_keyword": "spanish mistakes english speakers make",
-      "description": "The errors English speakers really make in Spanish, explained by a native English speaker and translator.",
+      "name": "Common Spanish Mistakes",
+      "pillar": "common-spanish-mistakes",
+      "pillar_title": "Common Spanish Mistakes Learners Make (and How to Fix Them)",
+      "pillar_focus_keyword": "spanish mistakes",
+      "description": "The mistakes Spanish learners really make, explained by a DELE-certified translator, with clear fixes and a quiz for each.",
       "groups": [
         {
           "name": "Grammar & structure",
@@ -939,7 +939,7 @@
               "focus_keyword": "spanish article mistakes",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "subject-pronouns-in-spanish",
@@ -947,7 +947,7 @@
               "focus_keyword": "subject pronouns in spanish",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "double-negatives-in-spanish",
@@ -955,7 +955,7 @@
               "focus_keyword": "double negatives in spanish",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "spanish-plural-mistakes",
@@ -1000,7 +1000,7 @@
               "focus_keyword": "english words that don't translate to spanish",
               "priority": "P2",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "how-to-say-your-age-in-spanish",
@@ -1008,7 +1008,7 @@
               "focus_keyword": "how to say your age in spanish",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "spanish-politeness-mistakes",
@@ -1016,7 +1016,7 @@
               "focus_keyword": "spanish politeness mistakes",
               "priority": "P2",
               "book": "love-slowly",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "spanish-punctuation-rules",
@@ -1024,7 +1024,7 @@
               "focus_keyword": "spanish punctuation rules",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "spanish-capitalization-rules",
@@ -1032,7 +1032,7 @@
               "focus_keyword": "spanish capitalization rules",
               "priority": "P2",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             }
           ]
         }

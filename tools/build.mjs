@@ -27,7 +27,7 @@ const slugify = (s) =>
 const stripTags = (h = '') => h.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 const wordCount = (h) => stripTags(h).split(' ').filter(Boolean).length;
 const fmtDate = (d) =>
-  new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Ho_Chi_Minh' });
+  new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/New_York' });
 const write = (rel, data) => {
   const f = path.join(OUT, rel);
   fs.mkdirSync(path.dirname(f), { recursive: true });
@@ -161,7 +161,7 @@ const nav = (active = '') => `
   <div class="wrap nav-in">
     <a href="/" class="logo">Theon<span>.</span></a>
     <ul class="links" id="links">
-      <li><a href="/#books">Books</a></li>
+      <li><a href="/">Home</a></li>
       <li><a href="/blog/"${active === 'blog' ? ' aria-current="page"' : ''}>Blog</a></li>
       <li><a href="/#about">About</a></li>
       <li><a href="/#contact">Contact</a></li>
@@ -371,12 +371,13 @@ const faqBlock = (faq = []) =>
     .map((f, i) => `<div id="faq-question-${i + 1}" class="rank-math-list-item"><h3 class="rank-math-question">${esc(f.q)}</h3><div class="rank-math-answer"><p>${f.a}</p></div></div>`)
     .join('')}</div></div>`;
 
+const listJoin = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + (a.length > 2 ? ',' : '') + ' and ' + a[a.length - 1]);
 const authorBox = () => `<div class="author-box" id="author">
   <img src="${AUTHOR.image}" alt="${esc(AUTHOR.name)}" width="96" height="96" loading="lazy">
   <div>
     <span class="eyebrow">Written by</span>
     <p class="author-name"><a href="/" rel="author">${esc(AUTHOR.name)}</a></p>
-    <p>${esc(AUTHOR.shortBio)} He is the author of ${BOOKS.map((b) => `<a href="${amazon(b.asin)}" target="_blank" rel="noopener"><em>${esc(b.short)}</em></a>`).join(', ').replace(/, ([^,]*)$/, ' and $1')}.</p>
+    <p>${esc(AUTHOR.shortBio)} He is the author of ${listJoin(BOOKS.map((b) => `<a href="${amazon(b.asin)}" target="_blank" rel="noopener"><em>${esc(b.short)}</em></a>`))}.</p>
     <p class="author-trust"><a href="/editorial-policy/">How articles are written and checked</a></p>
     ${socialRow()}
   </div>
@@ -430,7 +431,7 @@ function renderPost(p, posts) {
       '@id': p.url + '#article',
       headline: p.title,
       description: p.meta_description,
-      keywords: [p.focus_keyword, ...(p.tags || [])].filter(Boolean).join(', '),
+      keywords: [...new Set([p.focus_keyword, ...(p.tags || [])].filter(Boolean).map((k) => k.toLowerCase()))].join(', '),
       articleSection: p.category,
       datePublished: p.date_published,
       dateModified: p.date_modified,
@@ -627,7 +628,7 @@ function renderBlogIndex(posts, clusters = [], page = 1) {
 }
 
 // ---------- privacy policy ----------
-const PRIVACY_UPDATED = '2026-11-26T14:30:00+07:00';
+const PRIVACY_UPDATED = '2026-11-26T02:30:00-05:00';
 function renderPrivacy() {
   const url = SITE.url + '/privacy-policy/';
   const graph = [
@@ -701,7 +702,7 @@ function renderPrivacy() {
 }
 
 // ---------- editorial policy (E-E-A-T / trust) ----------
-const EDITORIAL_UPDATED = '2026-11-26T15:00:00+07:00';
+const EDITORIAL_UPDATED = '2026-11-26T07:45:00-05:00';
 function renderEditorial() {
   const url = SITE.url + '/editorial-policy/';
   const graph = [
@@ -724,11 +725,11 @@ function renderEditorial() {
 <p>This page explains how the articles on theonpham.com are written, checked and kept up to date. I want you to be able to trust what you read here, and to know exactly who is behind it.</p>
 
 <h2>Who writes this site</h2>
-<p>Every article is published by <a href="/">Theon Pham</a>, a native English speaker, DELE-certified in Spanish (Instituto Cervantes), and an English–Spanish translator with ${AUTHOR.experienceYears} years of experience. He is the author of ${BOOKS.map((b) => `<em>${esc(b.short)}</em>`).join(', ').replace(/, ([^,]*)$/, ' and $1')}. You can find my author profile on <a href="https://www.goodreads.com/author/show/73164463.Theon_Pham" target="_blank" rel="noopener me">Goodreads</a>.</p>
+<p>Every article is published by <a href="/">Theon Pham</a>, DELE-certified in Spanish (Instituto Cervantes) and an English–Spanish translator with ${AUTHOR.experienceYears} years of experience. He is the author of ${listJoin(BOOKS.map((b) => `<em>${esc(b.short)}</em>`))}. You can find my author profile on <a href="https://www.goodreads.com/author/show/73164463.Theon_Pham" target="_blank" rel="noopener me">Goodreads</a>.</p>
 
 <h2>How articles are written</h2>
 <ul>
-<li><strong>Written for English speakers.</strong> Articles focus on the real difficulties English speakers face with Spanish, and every Spanish example comes with its meaning.</li>
+<li><strong>Written for Spanish learners in the United States.</strong> Articles focus on the real difficulties learners face with Spanish, in American English, and every Spanish example comes with its meaning.</li>
 <li><strong>Natural, current Spanish.</strong> Examples use everyday Latin American Spanish unless an article says otherwise. When a word or structure differs in Spain or between countries, the article says so.</li>
 <li><strong>Research and drafting tools.</strong> I may use digital tools, including AI writing assistants, to help with research, outlines and first drafts. Every article is then edited, fact-checked and approved by me before it is published, and I am responsible for everything on this site.</li>
 </ul>
@@ -751,7 +752,7 @@ function renderEditorial() {
 <h2>Independence and links to my books</h2>
 <ul>
 <li>No article on this site is sponsored or paid for by a third party.</li>
-<li>Some articles mention my own books where they are genuinely relevant. These are clearly labelled “From the author”.</li>
+<li>Some articles mention my own books where they are genuinely relevant. These are clearly labeled “From the author”.</li>
 <li>Links to Amazon go to my books’ product pages. If I ever use affiliate links, I will disclose it on the page where they appear.</li>
 </ul>
 

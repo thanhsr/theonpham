@@ -72,8 +72,25 @@ if (!process.env.PIXABAY_API_KEY) {
   console.error('✗ Missing PIXABAY_API_KEY. Copy .env.example to .env and paste your key from https://pixabay.com/api/docs/');
   process.exit(1);
 }
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// Retry on rate limits (429) and server errors, with backoff; honors Retry-After.
+async function fetchRetry(url, tries = 6) {
+  let wait = 3000;
+  for (let t = 1; ; t++) {
+    let r;
+    try { r = await fetch(url, { headers: UA }); } catch (e) { if (t >= tries) throw e; r = null; }
+    if (r && r.ok) return r;
+    const code = r ? r.status : 'network';
+    if (t >= tries || (r && r.status !== 429 && r.status < 500)) return r || Promise.reject(new Error('network error'));
+    const ra = r && Number(r.headers.get('retry-after'));
+    const ms = ra ? ra * 1000 : wait;
+    console.log(`   · ${code} — waiting ${Math.round(ms / 1000)}s before retry ${t}/${tries - 1}…`);
+    await sleep(ms);
+    wait = Math.min(wait * 2, 60000);
+  }
+}
 async function getJSON(url) {
-  const r = await fetch(url, { headers: UA });
+  const r = await fetchRetry(url);
   if (!r.ok) throw new Error(`${r.status} ${r.statusText} — ${await r.text().catch(() => '')}`.slice(0, 200));
   return r.json();
 }
@@ -112,7 +129,7 @@ async function findPhoto(query, skip) {
 }
 
 async function download(photo) {
-  const r = await fetch(photo.url, { headers: UA });
+  const r = await fetchRetry(photo.url);
   if (!r.ok) throw new Error(`download ${r.status}`);
   return Buffer.from(await r.arrayBuffer());
 }
@@ -145,7 +162,11 @@ for (let i = 0; i < plan.length; i++) {
     console.log(`   ✗ nothing found. Edit image_plan[${i}].query in content/${slug}.json and run again.`);
     continue;
   }
-  const buf = await download(photo);
+  let buf;
+  try { buf = await download(photo); } catch (e) {
+    console.log(`   ✗ ${e.message} — skipped for now; run npm run publish again later.`);
+    continue;
+  }
   const base = `${slug}-${n}`;
   const kb = (await save(buf, path.join(dir, `${base}.webp`), W, H)) >> 10;
   await save(buf, path.join(dir, `${base}-800.webp`), 800, 450);
@@ -171,6 +192,10 @@ for (let i = 0; i < plan.length; i++) {
   usedIds.add(photo.id);
   changed++;
   console.log(`   ✓ ${photo.credit.source} · ${photo.credit.name} → img/${slug}/${base}.webp (${kb} KB)`);
+  // save progress after every image, and pause briefly so Pixabay doesn't rate-limit us
+  fs.writeFileSync(postFile, JSON.stringify(post, null, 2) + '\n');
+  fs.writeFileSync(USED, JSON.stringify(used, null, 2) + '\n');
+  await sleep(1500);
 }
 
 post.images = post.images.slice(0, plan.length);

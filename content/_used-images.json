@@ -216,7 +216,7 @@
     "pixabay:1728986",
     "pixabay:6904142"
   ],
-  "spanish-mistakes-english-speakers-make": [
+  "common-spanish-mistakes": [
     "pixabay:701301",
     "pixabay:5831644",
     "pixabay:9755525"
@@ -270,5 +270,230 @@
     "pixabay:2620148",
     "pixabay:6105750",
     "pixabay:849825"
+  ],
+  "apologizing-to-your-partner-in-spanish": [
+    "pixabay:2590810",
+    "pixabay:430529",
+    "pixabay:927746"
+  ],
+  "aqui-vs-aca": [
+    "pixabay:1264062",
+    "pixabay:3242215",
+    "pixabay:9983074"
+  ],
+  "at-the-doctor-in-spanish": [
+    "pixabay:4099432",
+    "pixabay:1539191",
+    "pixabay:2093368"
+  ],
+  "congratulations-in-spanish": [
+    "pixabay:1230872",
+    "pixabay:7287004",
+    "pixabay:2395283"
+  ],
+  "decir-vs-hablar": [
+    "pixabay:2714970",
+    "pixabay:1014406",
+    "pixabay:408482"
+  ],
+  "disagreeing-politely-in-spanish": [
+    "pixabay:661670",
+    "pixabay:1979261",
+    "pixabay:5134828"
+  ],
+  "double-negatives-in-spanish": [
+    "pixabay:2181919",
+    "pixabay:3537801",
+    "pixabay:3134131"
+  ],
+  "emergency-phrases-in-spanish": [
+    "pixabay:4267434",
+    "pixabay:1016218",
+    "pixabay:3082670"
+  ],
+  "english-words-that-dont-translate-to-spanish": [
+    "pixabay:1961070",
+    "pixabay:258237",
+    "pixabay:5477042"
+  ],
+  "esta-vs-esta": [
+    "pixabay:9093322",
+    "pixabay:2587179",
+    "pixabay:1243758"
+  ],
+  "este-ese-aquel": [
+    "pixabay:1841132",
+    "pixabay:183853",
+    "pixabay:3515491"
+  ],
+  "get-well-soon-in-spanish": [
+    "pixabay:4749906",
+    "pixabay:7506621",
+    "pixabay:9443471"
+  ],
+  "haber-vs-a-ver": [
+    "pixabay:3157821",
+    "pixabay:5965372",
+    "pixabay:660670"
+  ],
+  "hecho-vs-echo": [
+    "pixabay:943245",
+    "pixabay:1867429",
+    "pixabay:7789170"
+  ],
+  "how-to-apologize-in-spanish": [
+    "pixabay:5438612",
+    "pixabay:2743994",
+    "pixabay:3100563"
+  ],
+  "how-to-compliment-food-in-spanish": [
+    "pixabay:6174460",
+    "pixabay:10430834",
+    "pixabay:4354601"
+  ],
+  "how-to-say-your-age-in-spanish": [
+    "pixabay:1114056",
+    "pixabay:453136",
+    "pixabay:7648899"
+  ],
+  "job-interview-in-spanish": [
+    "pixabay:10559064",
+    "pixabay:7607939",
+    "pixabay:2785979"
+  ],
+  "lo-vs-le": [
+    "pixabay:4669449",
+    "pixabay:925589",
+    "pixabay:5190643"
+  ],
+  "long-distance-relationship-spanish": [
+    "pixabay:3086304",
+    "pixabay:551921",
+    "pixabay:7647811"
+  ],
+  "love-letter-in-spanish": [
+    "pixabay:2111529",
+    "pixabay:2898277",
+    "pixabay:205334"
+  ],
+  "making-friends-in-spanish": [
+    "pixabay:7448568",
+    "pixabay:1853262",
+    "pixabay:2576652"
+  ],
+  "malo-vs-mal": [
+    "pixabay:2638542",
+    "pixabay:2239269",
+    "pixabay:3864809"
+  ],
+  "ordering-food-in-spanish": [
+    "pixabay:3444480",
+    "pixabay:498420",
+    "pixabay:4505032"
+  ],
+  "phone-calls-in-spanish": [
+    "pixabay:5190644",
+    "pixabay:1223310",
+    "pixabay:3594206"
+  ],
+  "poder-vs-saber": [
+    "pixabay:5095887",
+    "pixabay:330607",
+    "pixabay:8032702"
+  ],
+  "polite-requests-in-spanish": [
+    "pixabay:8890531",
+    "pixabay:3344508",
+    "pixabay:5632026"
+  ],
+  "porque-vs-por-que": [
+    "pixabay:20374",
+    "pixabay:1840276",
+    "pixabay:7696621"
+  ],
+  "que-vs-cual": [
+    "pixabay:4060505",
+    "pixabay:1767562",
+    "pixabay:3653353"
+  ],
+  "saber-vs-conocer": [
+    "pixabay:4660847",
+    "pixabay:841171",
+    "pixabay:1842203"
+  ],
+  "si-vs-si": [
+    "pixabay:2313804",
+    "pixabay:4610699",
+    "pixabay:3196481"
+  ],
+  "spanish-article-mistakes": [
+    "pixabay:2608864",
+    "pixabay:1149148",
+    "pixabay:3073971"
+  ],
+  "spanish-capitalization-rules": [
+    "pixabay:2428560",
+    "pixabay:1204029",
+    "pixabay:3481061"
+  ],
+  "spanish-politeness-mistakes": [
+    "pixabay:4181395",
+    "pixabay:920236",
+    "pixabay:10123931"
+  ],
+  "spanish-punctuation-rules": [
+    "pixabay:7627999",
+    "pixabay:7046730",
+    "pixabay:923188"
+  ],
+  "spanish-wedding-phrases": [
+    "pixabay:10320741",
+    "pixabay:1283608",
+    "pixabay:260894"
+  ],
+  "subject-pronouns-in-spanish": [
+    "pixabay:3696896",
+    "pixabay:4939371",
+    "pixabay:455124"
+  ],
+  "talking-to-coworkers-in-spanish": [
+    "pixabay:594091",
+    "pixabay:593296",
+    "pixabay:2178440"
+  ],
+  "talking-to-kids-in-spanish": [
+    "pixabay:4744439",
+    "pixabay:2560321",
+    "pixabay:5141333"
+  ],
+  "tambien-vs-tampoco": [
+    "pixabay:7850299",
+    "pixabay:9643477",
+    "pixabay:563797"
+  ],
+  "tener-vs-haber": [
+    "pixabay:525732",
+    "pixabay:4298285",
+    "pixabay:3199659"
+  ],
+  "tu-vs-tu": [
+    "pixabay:2912932",
+    "pixabay:586268",
+    "pixabay:1619751"
+  ],
+  "tu-vs-usted": [
+    "pixabay:1807505",
+    "pixabay:3943192",
+    "pixabay:3382503"
+  ],
+  "volver-vs-devolver": [
+    "pixabay:6946498",
+    "pixabay:735075",
+    "pixabay:491626"
+  ],
+  "ya-vs-todavia": [
+    "pixabay:797833",
+    "pixabay:959124",
+    "pixabay:4094937"
   ]
 }

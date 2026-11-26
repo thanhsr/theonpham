@@ -19,8 +19,11 @@ const sh = (cmd) => execSync(cmd, { cwd: ROOT, stdio: 'inherit' });
 const run = (file, a) => spawnSync(process.execPath, [path.join(ROOT, 'tools', file), ...a], { cwd: ROOT, stdio: 'inherit' }).status;
 const read = (s) => JSON.parse(fs.readFileSync(path.join(CONTENT, `${s}.json`), 'utf8'));
 const nowISO = () => {
-  const d = new Date(Date.now() + 7 * 3600e3); // Asia/Ho_Chi_Minh
-  return d.toISOString().replace(/\.\d{3}Z$/, '+07:00');
+  // America/New_York (DST-aware), e.g. 2026-11-26T08:15:00-05:00
+  const f = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'longOffset' });
+  const p = Object.fromEntries(f.formatToParts(new Date()).map((x) => [x.type, x.value]));
+  const off = (p.timeZoneName || 'GMT-05:00').replace('GMT', '') || '+00:00';
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}${off}`;
 };
 
 if (!slugs.length) {

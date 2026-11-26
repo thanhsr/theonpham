@@ -30,12 +30,12 @@ export const AUTHOR = {
   image: '/assets/theon.jpg',
   email: 'tecairam@gmail.com',
   shortBio:
-    'Theon Pham is a native English speaker, DELE-certified in Spanish, and an English–Spanish translator with ten years of experience. He writes bilingual books that teach Spanish one sentence at a time.',
+    'Theon Pham is a DELE-certified English–Spanish translator with ten years of experience. He writes bilingual books that teach Spanish one sentence at a time.',
   knowsAbout: [
     'English–Spanish translation',
     'Spanish language',
     'Spanish grammar',
-    'Spanish for English speakers',
+    'Spanish for learners',
     'Bilingual reading',
     'Latin American Spanish',
   ],
