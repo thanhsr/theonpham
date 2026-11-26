@@ -172,14 +172,14 @@ const footer = () => `
     </div>
     <div>
       <h4>Explore</h4>
-      <ul><li><a href="/#books">Books</a></li><li><a href="/blog/">Blog</a></li><li><a href="/#about">About Theon</a></li><li><a href="/#contact">Contact</a></li></ul>
+      <ul><li><a href="/#books">Books</a></li><li><a href="/blog/">Blog</a></li><li><a href="/#about">About Theon</a></li><li><a href="/#contact">Contact</a></li><li><a href="/privacy-policy/">Privacy Policy</a></li></ul>
     </div>
     <div>
       <h4>Books</h4>
       <ul>${BOOKS.map((b) => `<li><a href="${amazon(b.asin)}" target="_blank" rel="noopener">${esc(b.short)}</a></li>`).join('')}</ul>
     </div>
   </div>
-  <div class="wrap foot-bottom"><span>© ${new Date().getFullYear()} Theon Pham</span><span>Written with faith, in two languages.</span></div>
+  <div class="wrap foot-bottom"><span>© ${new Date().getFullYear()} Theon Pham</span><span><a href="/privacy-policy/">Privacy Policy</a> · Written with faith, in two languages.</span></div>
 </footer>
 <script>
 const b=document.getElementById('burger'),l=document.getElementById('links');
@@ -536,7 +536,13 @@ function renderBlogIndex(posts, clusters = [], page = 1) {
   const loadMore = page < pages
     ? `<div class="load-more-wrap"><a class="load-more btn ghost" href="${pageHref(page + 1)}" data-load="/blog/data/page-${page + 1}.json" data-target="latest-grid">Load more articles</a></div>`
     : '';
-  const pager = !first ? `<nav class="pager" aria-label="Blog pages"><a href="${pageHref(page - 1)}">← Newer articles</a></nav>` : '';
+  const pager = !first
+    ? `<nav class="pager" aria-label="Blog pages">
+      <a class="pager-step" href="${pageHref(page - 1)}" rel="prev">← Newer</a>
+      <span class="pager-nums">${Array.from({ length: pages }, (_, i) => i + 1).map((n) => n === page ? `<span class="pager-num current" aria-current="page">${n}</span>` : `<a class="pager-num" href="${pageHref(n)}">${n}</a>`).join('')}</span>
+      ${page < pages ? `<a class="pager-step" href="${pageHref(page + 1)}" rel="next">Older →</a>` : '<span class="pager-step disabled">Older →</span>'}
+    </nav>`
+    : '';
   return (
     head({
       title: first ? 'Blog — Learning Spanish, Faith & Growing Up | Theon Pham' : `Blog — Page ${page} of ${pages} | Theon Pham`,
@@ -556,6 +562,80 @@ function renderBlogIndex(posts, clusters = [], page = 1) {
   <section class="wrap latest">${guides ? '<h2 class="latest-title">Latest articles</h2>' : ''}${list.length ? `<div class="post-grid" id="latest-grid">${list.map(card).join('')}</div>${loadMore}${pager}` : '<p class="empty">New articles are coming soon.</p>'}</section>
 </main>` + loadMoreScript + footer()
   );
+}
+
+// ---------- privacy policy ----------
+const PRIVACY_UPDATED = '2026-11-26T14:30:00+07:00';
+function renderPrivacy() {
+  const url = SITE.url + '/privacy-policy/';
+  const graph = [
+    personNode(), websiteNode(),
+    breadcrumbNode(url + '#breadcrumb', [{ name: 'Home', url: SITE.url + '/' }, { name: 'Privacy Policy', url }]),
+    { '@type': 'WebPage', '@id': url + '#webpage', url, name: 'Privacy Policy — Theon Pham', isPartOf: { '@id': WEBSITE_ID },
+      breadcrumb: { '@id': url + '#breadcrumb' }, dateModified: PRIVACY_UPDATED, inLanguage: SITE.lang },
+  ];
+  return head({
+      title: 'Privacy Policy | Theon Pham',
+      description: 'How theonpham.com handles your information: what is collected, third-party services, your choices and how to contact Theon Pham.',
+      canonical: url, image: SITE.defaultImage, imageW: 900, imageH: 1125, schema: ldjson(graph),
+    }) + `<body class="page privacy">` + nav() + `<main id="main" class="site-main">
+  <header class="entry-header wrap-narrow">
+    <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span><span class="last">Privacy Policy</span></p></nav>
+    <h1 class="entry-title">Privacy Policy</h1>
+    <div class="entry-meta"><span>Last updated: <time datetime="${PRIVACY_UPDATED}">${fmtDate(PRIVACY_UPDATED)}</time></span></div>
+  </header>
+  <div class="entry-content wrap-narrow legal">
+<p>This Privacy Policy explains how theonpham.com (“the site”, “I”, “me”) handles information when you visit. The site belongs to Theon Pham, an independent author. I have tried to keep it short and honest: this is a simple website about my books and writing, and I collect as little as possible.</p>
+
+<h2>Summary</h2>
+<ul>
+<li>I do not ask you to create an account, and the site has no comment forms or newsletter sign-up.</li>
+<li>The site does not set its own advertising or tracking cookies.</li>
+<li>Some third-party services (hosting, fonts, book cover images) may receive basic technical data such as your IP address when your browser loads them.</li>
+<li>If you email me, I use your message only to reply.</li>
+</ul>
+
+<h2>Information I collect</h2>
+<h3>Information you send me</h3>
+<p>If you contact me by email at <strong>${esc(AUTHOR.email)}</strong>, I receive your email address, your name if you include it, and whatever you choose to write. I use this only to read and answer your message. I do not sell it, share it for marketing or add you to any mailing list.</p>
+<h3>Technical information</h3>
+<p>Like almost every website, the servers that deliver this site may automatically record technical information when you visit, such as your IP address, browser type, the page you requested and the time of the request. I do not use this information to identify you personally.</p>
+
+<h2>Third-party services</h2>
+<p>The site relies on a few external services. Each has its own privacy policy:</p>
+<ul>
+<li><strong>GitHub Pages</strong> hosts the site. GitHub may log visitor IP addresses for security and to keep the service running. See the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>.</li>
+<li><strong>Google Fonts</strong> provides the typefaces. Your browser requests the fonts from Google’s servers, which may receive your IP address. See the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</li>
+<li><strong>Amazon</strong> hosts the book cover images shown on the site, and book links take you to Amazon to buy my books. Loading a cover image or clicking a link may share technical data with Amazon. See the <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=GX7NJQ4ZB8MHFRNJ" target="_blank" rel="noopener">Amazon Privacy Notice</a>.</li>
+<li><strong>Pixabay</strong> is the source of many blog photos. The images are downloaded and served from this site, so viewing them does not contact Pixabay.</li>
+</ul>
+<p>The site also links to social networks (X, Facebook, YouTube, Pinterest, Goodreads). Those links are plain links: nothing is shared with those services unless you click them, at which point their own policies apply.</p>
+
+<h2>Cookies and local storage</h2>
+<p>The site itself does not set cookies. Third-party services listed above may use cookies or similar technologies under their own policies, especially if you are signed in to them. You can block or delete cookies in your browser settings at any time.</p>
+
+<h2>Analytics and advertising</h2>
+<p>At the time of the last update, the site does not use analytics tools or display advertising. If that changes, I will update this policy before doing so.</p>
+
+<h2>Book links</h2>
+<p>Links to my books go to their Amazon product pages. If I ever use affiliate links, I will say so clearly on the page where they appear.</p>
+
+<h2>Children’s privacy</h2>
+<p>The site is written for adults and is not directed at children under 13. I do not knowingly collect personal information from children. If you believe a child has sent me personal information, please contact me and I will delete it.</p>
+
+<h2>Your choices and rights</h2>
+<p>Depending on where you live, you may have the right to ask what personal information I hold about you, to correct it or to have it deleted. Because I only hold information you send me by email, the simplest way to exercise these rights is to write to me at <strong>${esc(AUTHOR.email)}</strong>. I will respond within a reasonable time.</p>
+
+<h2>Data security and retention</h2>
+<p>I keep emails only as long as needed to respond and for my reasonable records, and I take sensible steps to protect them. No method of transmission over the internet is completely secure, so please avoid sending sensitive information by email.</p>
+
+<h2>Changes to this policy</h2>
+<p>I may update this Privacy Policy from time to time. The “Last updated” date at the top shows when it last changed. Significant changes will be reflected on this page.</p>
+
+<h2>Contact</h2>
+<p>Questions about this policy or your information? Email <strong>${esc(AUTHOR.email)}</strong>.</p>
+  </div>
+</main>` + footer();
 }
 
 // ---------- home ----------
@@ -588,6 +668,7 @@ function sitemap(posts) {
   const urls = [
     { loc: SITE.url + '/', lastmod: posts[0]?.date_modified },
     { loc: SITE.url + '/blog/', lastmod: posts[0]?.date_modified },
+    { loc: SITE.url + '/privacy-policy/', lastmod: PRIVACY_UPDATED },
     ...posts.map((p) => ({ loc: p.url, lastmod: p.date_modified, images: p.images })),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -681,6 +762,7 @@ write('sitemap.xml', sitemap(posts));
 write('robots.txt', robots());
 write('feed.xml', feed(posts));
 write('404.html', notFound());
+write('privacy-policy/index.html', renderPrivacy());
 copyDir(path.join(ROOT, 'assets'), path.join(OUT, 'assets'));
 copyDir(path.join(ROOT, 'img'), path.join(OUT, 'img'));
 for (const f of ['favicon.ico', 'CNAME']) if (fs.existsSync(path.join(ROOT, f))) fs.copyFileSync(path.join(ROOT, f), path.join(OUT, f));
