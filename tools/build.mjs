@@ -217,7 +217,7 @@ function loadPosts() {
     p.url = `${SITE.url}/blog/${p.slug}/`;
     p.path = `/blog/${p.slug}/`;
     p.date_modified = p.date_modified || p.date_published;
-    p.words = wordCount(p.body_html || '');
+    p.words = wordCount((p.body_html || '') + ' ' + (p.quiz?.questions || []).map((x) => [x.q, ...(x.options || []), x.explain].join(' ')).join(' '));
     p.readMin = Math.max(1, Math.round(p.words / 220));
     p.cover = p.images[0] || null;
     posts.push(p);
@@ -256,6 +256,41 @@ ${groups.map((g) => `<h3>${esc(g.name)}</h3><ul class="cluster-list">${g.live.ma
 </section>`;
 };
 
+// Interactive quiz: post.quiz = { title, questions: [{ q, options: [], answer: index, explain }] }
+// Works without JavaScript (answers sit in <details>); with JS, buttons give instant feedback and a score.
+const quizBlock = (quiz) => {
+  if (!quiz?.questions?.length) return '';
+  const L = 'ABCDEFGH';
+  return `<section class="quiz" id="quiz" data-total="${quiz.questions.length}"><h2>${esc(quiz.title || 'Quick quiz')}</h2>
+<p class="quiz-intro">Choose an answer for each question. You’ll see the explanation straight away.</p>
+<ol class="quiz-list">${quiz.questions.map((x, qi) => `<li class="quiz-item" data-answer="${x.answer}">
+<p class="quiz-q">${x.q}</p>
+<div class="quiz-opts" role="group" aria-label="Question ${qi + 1}">${x.options.map((o, oi) => `<button type="button" class="quiz-opt" data-i="${oi}"><span>${L[oi]}</span> ${o}</button>`).join('')}</div>
+<details class="quiz-ans"><summary>Show answer</summary><p><strong>Answer: ${L[x.answer]}. ${x.options[x.answer]}</strong> ${x.explain || ''}</p></details>
+</li>`).join('')}</ol>
+<p class="quiz-score" aria-live="polite"></p>
+</section>`;
+};
+const quizScript = `<script>
+document.querySelectorAll('.quiz').forEach(function (qz) {
+  var total = +qz.dataset.total, done = 0, right = 0, score = qz.querySelector('.quiz-score');
+  qz.querySelectorAll('.quiz-item').forEach(function (it) {
+    var ans = +it.dataset.answer;
+    it.querySelectorAll('.quiz-opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (it.classList.contains('answered')) return;
+        it.classList.add('answered'); done++;
+        var ok = +b.dataset.i === ans; if (ok) right++;
+        b.classList.add(ok ? 'right' : 'wrong');
+        it.querySelector('.quiz-opt[data-i="' + ans + '"]').classList.add('right');
+        it.querySelector('details').open = true;
+        if (done === total) score.textContent = 'You got ' + right + ' out of ' + total + (right === total ? ' — perfect!' : right >= total * 0.6 ? ' — nice work!' : ' — read the explanations and try again tomorrow.');
+      });
+    });
+  });
+});
+</script>`;
+
 function processBody(p) {
   const toc = [];
   const used = new Set();
@@ -264,6 +299,7 @@ function processBody(p) {
     const block = clusterBlock(p.cluster);
     html = /\{\{cluster\}\}/.test(html) ? html.replace(/(<p>)?\s*\{\{cluster\}\}\s*(<\/p>)?/g, block) : html + '\n' + block;
   } else html = html.replace(/(<p>)?\s*\{\{cluster\}\}\s*(<\/p>)?/g, '');
+  if (p.quiz) html = /\{\{quiz\}\}/.test(html) ? html.replace(/(<p>)?\s*\{\{quiz\}\}\s*(<\/p>)?/g, quizBlock(p.quiz)) : html + '\n' + quizBlock(p.quiz);
   // {{link:slug|anchor text}} → link if that post is published, plain text until then
   html = html.replace(/\{\{link:([a-z0-9-]+)(?:\|([^}]+))?\}\}/g, (m, slug, text) => {
     const t = POSTS_BY_SLUG[slug];
@@ -471,7 +507,7 @@ ${faqBlock(p.faq)}
     </footer>
   </article>
   ${related.length ? `<section class="related wrap"><h2>Keep reading</h2><div class="post-grid">${related.map(card).join('')}</div></section>` : ''}
-</main>` +
+</main>` + (p.quiz ? quizScript : '') +
     footer()
   );
 }
@@ -796,7 +832,7 @@ const notFound = () =>
 function seoReport(p) {
   const issues = [];
   // normalise like a search engine: case, dashes and punctuation don't matter
-  const norm = (x = '') => stripTags(x).toLowerCase().replace(/[–—\-_/:,.!?()“”"'’]/g, ' ').replace(/\s+/g, ' ').trim();
+  const norm = (x = '') => stripTags(x).toLowerCase().replace(/['’]/g, '').replace(/[–—\-_/:,.!?()“”"'’]/g, ' ').replace(/\s+/g, ' ').trim();
   const kw = norm(p.focus_keyword);
   const t = p.seo_title || p.title;
   const has = (x) => (' ' + norm(x) + ' ').includes(' ' + kw + ' ');
