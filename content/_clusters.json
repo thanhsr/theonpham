@@ -237,7 +237,7 @@
               "focus_keyword": "i miss you in spanish",
               "priority": "P3",
               "book": "love-slowly",
-              "status": "planned"
+              "status": "written"
             }
           ]
         },
@@ -295,10 +295,10 @@
             {
               "slug": "video-calls-with-family-in-spanish",
               "title": "Video calls with family abroad",
-              "focus_keyword": "spanish phrases for video calls with family",
+              "focus_keyword": "video calls with family in spanish",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "spanish-holiday-phrases",
@@ -306,7 +306,7 @@
               "focus_keyword": "spanish holiday phrases",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             }
           ]
         },
@@ -375,7 +375,7 @@
               "focus_keyword": "ways to say thank you in spanish",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             }
           ]
         },
@@ -436,15 +436,15 @@
               "focus_keyword": "grocery shopping in spanish",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "at-the-pharmacy-in-spanish",
               "title": "At the pharmacy",
-              "focus_keyword": "spanish phrases at the pharmacy",
+              "focus_keyword": "at the pharmacy in spanish",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             }
           ]
         },
@@ -494,10 +494,10 @@
             {
               "slug": "spanish-for-online-meetings",
               "title": "Online meetings",
-              "focus_keyword": "spanish phrases for online meetings",
+              "focus_keyword": "spanish for online meetings",
               "priority": "P3",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             }
           ]
         },
@@ -515,18 +515,18 @@
             {
               "slug": "at-the-airport-in-spanish",
               "title": "At the airport",
-              "focus_keyword": "spanish phrases at the airport",
+              "focus_keyword": "at the airport in spanish",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "hotel-spanish-phrases",
               "title": "At the hotel",
-              "focus_keyword": "spanish phrases at the hotel",
+              "focus_keyword": "spanish hotel phrases",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "asking-for-directions-in-spanish",
@@ -534,7 +534,7 @@
               "focus_keyword": "asking for directions in spanish",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "taking-a-taxi-in-spanish",
@@ -542,7 +542,7 @@
               "focus_keyword": "taking a taxi in spanish",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "renting-an-apartment-in-spanish",
@@ -550,7 +550,7 @@
               "focus_keyword": "renting an apartment in spanish",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             }
           ]
         }
@@ -746,7 +746,7 @@
               "focus_keyword": "por vs para",
               "priority": "P3",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "preterite-vs-imperfect",
@@ -754,7 +754,7 @@
               "focus_keyword": "preterite vs imperfect",
               "priority": "P3",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "indicative-vs-subjunctive",
@@ -762,7 +762,7 @@
               "focus_keyword": "indicative vs subjunctive",
               "priority": "P3",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             }
           ]
         },
@@ -815,7 +815,7 @@
               "focus_keyword": "bastante vs suficiente",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             }
           ]
         },
@@ -868,7 +868,7 @@
               "focus_keyword": "el vs él",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "mas-vs-mas",
@@ -876,7 +876,7 @@
               "focus_keyword": "mas vs más",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             },
             {
               "slug": "solo-vs-solo",
@@ -884,7 +884,7 @@
               "focus_keyword": "solo vs sólo",
               "priority": "P3",
               "book": "a-road-in-bloom",
-              "status": "planned"
+              "status": "written"
             }
           ]
         }
@@ -963,7 +963,7 @@
               "focus_keyword": "spanish plural mistakes",
               "priority": "P3",
               "book": "the-mind-lies",
-              "status": "planned"
+              "status": "written"
             }
           ]
         },

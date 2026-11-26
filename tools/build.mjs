@@ -119,6 +119,16 @@ function head({ title, description, canonical, image, imageAlt, imageW = 1200, i
 <html lang="${SITE.lang}">
 <head>
 <meta charset="UTF-8">
+<!-- Google Tag Manager -->
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-M222PGZ2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+  gtag('js', new Date());
+</script>
+<!-- End Google Tag Manager -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
