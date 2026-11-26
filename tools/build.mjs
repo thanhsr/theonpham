@@ -491,14 +491,30 @@ function blogData(posts, clusters) {
 
 const loadMoreScript = `<script>
 document.querySelectorAll('[data-load]').forEach(function (btn) {
+  var label = btn.textContent, loaded = false, open = false;
+  var target = document.getElementById(btn.dataset.target);
+  function setOpen(v) {
+    open = v;
+    target.classList.toggle('collapsed', !v);
+    btn.textContent = v ? btn.dataset.collapse : label;
+    btn.setAttribute('aria-expanded', v ? 'true' : 'false');
+    if (!v) {
+      var band = btn.closest('.guide-band') || target;
+      if (band.getBoundingClientRect().top < 0) band.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
   btn.addEventListener('click', function (e) {
     if (!window.fetch) return;            // old browsers just follow the link
     e.preventDefault();
-    var target = document.getElementById(btn.dataset.target);
+    if (btn.dataset.collapse && loaded) { setOpen(!open); return; }   // toggle without refetching
     btn.classList.add('loading'); btn.setAttribute('aria-busy', 'true');
     fetch(btn.dataset.load).then(function (r) { if (!r.ok) throw r; return r.json(); }).then(function (d) {
-      target.insertAdjacentHTML('beforeend', d.html);
-      if (d.next) { btn.dataset.load = d.next; btn.href = d.nextHref; btn.classList.remove('loading'); btn.removeAttribute('aria-busy'); }
+      var tpl = document.createElement('template'); tpl.innerHTML = d.html;
+      Array.prototype.forEach.call(tpl.content.children, function (el) { el.classList.add('extra'); });
+      target.appendChild(tpl.content);
+      btn.classList.remove('loading'); btn.removeAttribute('aria-busy');
+      if (btn.dataset.collapse) { loaded = true; setOpen(true); return; }
+      if (d.next) { btn.dataset.load = d.next; btn.href = d.nextHref; }
       else btn.parentNode.removeChild(btn);
     }).catch(function () { window.location.href = btn.href; });
   });
@@ -516,7 +532,7 @@ function renderBlogIndex(posts, clusters = [], page = 1) {
       <span class="guide-body"><span class="eyebrow">Complete guide · ${c.published.length + 1} article${c.published.length ? 's' : ''}</span><strong>${esc(c.pillarPost.title)}</strong><span>${esc(c.description)}</span><span class="guide-cta">Start the guide →</span></span>
     </a>
     ${c.published.length ? `<div class="guide-side"><ul class="guide-list" id="guide-${c.id}">${c.published.slice(0, GUIDE_LIST).map(guideItem).join('')}</ul>
-    ${more > 0 ? `<a class="guide-more" href="${c.pillarPost.path}#the-complete-guide" data-load="/blog/data/cluster-${c.id}.json" data-target="guide-${c.id}">Show ${more} more article${more > 1 ? 's' : ''} ↓</a>` : ''}</div>` : ''}
+    ${more > 0 ? `<a class="guide-more" href="${c.pillarPost.path}#the-complete-guide" data-load="/blog/data/cluster-${c.id}.json" data-target="guide-${c.id}" data-collapse="Show less ↑" aria-expanded="false" aria-controls="guide-${c.id}">Show ${more} more article${more > 1 ? 's' : ''} ↓</a>` : ''}</div>` : ''}
   </section>`;
   }).join('');
   const list = posts.slice((page - 1) * PER_PAGE, page * PER_PAGE);
