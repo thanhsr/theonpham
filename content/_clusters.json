@@ -142,13 +142,6 @@
               "focus_keyword": "spanish words with no english translation",
               "intent": "informational",
               "book": "the-mind-lies"
-            },
-            {
-              "slug": "bilingual-bible-english-spanish",
-              "title": "Reading a Bilingual Bible in English and Spanish",
-              "focus_keyword": "bilingual bible",
-              "intent": "informational / commercial",
-              "book": "god-and-you"
             }
           ]
         }

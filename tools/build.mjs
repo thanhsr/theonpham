@@ -466,43 +466,95 @@ ${faqBlock(p.faq)}
   );
 }
 
-function renderBlogIndex(posts, clusters = []) {
-  const guides = clusters.filter((c) => c.pillarPost).map((c) => `<section class="wrap guide-band">
+// Blog listing: 1 featured + GUIDE_LIST posts per cluster, PER_PAGE latest posts.
+// Extra items are loaded with fetch() from static JSON in /blog/data/. Each "load more" is also a real link
+// (pillar page / /blog/page/N/) so search engines and no-JS visitors can reach every post.
+const GUIDE_LIST = 5;
+const PER_PAGE = 9;
+const guideItem = (x) => `<li><a href="${x.path}">${esc(x.title)}</a></li>`;
+const pageCount = (posts) => Math.max(1, Math.ceil(posts.length / PER_PAGE));
+const pageHref = (n) => (n <= 1 ? '/blog/' : `/blog/page/${n}/`);
+
+function blogData(posts, clusters) {
+  const files = {};
+  for (const c of clusters.filter((c) => c.pillarPost && c.published.length > GUIDE_LIST))
+    files[`blog/data/cluster-${c.id}.json`] = { html: c.published.slice(GUIDE_LIST).map(guideItem).join('') };
+  const pages = pageCount(posts);
+  for (let n = 2; n <= pages; n++)
+    files[`blog/data/page-${n}.json`] = {
+      html: posts.slice((n - 1) * PER_PAGE, n * PER_PAGE).map(card).join(''),
+      next: n < pages ? `/blog/data/page-${n + 1}.json` : null,
+      nextHref: n < pages ? pageHref(n + 1) : null,
+    };
+  return files;
+}
+
+const loadMoreScript = `<script>
+document.querySelectorAll('[data-load]').forEach(function (btn) {
+  btn.addEventListener('click', function (e) {
+    if (!window.fetch) return;            // old browsers just follow the link
+    e.preventDefault();
+    var target = document.getElementById(btn.dataset.target);
+    btn.classList.add('loading'); btn.setAttribute('aria-busy', 'true');
+    fetch(btn.dataset.load).then(function (r) { if (!r.ok) throw r; return r.json(); }).then(function (d) {
+      target.insertAdjacentHTML('beforeend', d.html);
+      if (d.next) { btn.dataset.load = d.next; btn.href = d.nextHref; btn.classList.remove('loading'); btn.removeAttribute('aria-busy'); }
+      else btn.parentNode.removeChild(btn);
+    }).catch(function () { window.location.href = btn.href; });
+  });
+});
+</script>`;
+
+function renderBlogIndex(posts, clusters = [], page = 1) {
+  const pages = pageCount(posts);
+  const first = page === 1;
+  const guides = !first ? '' : clusters.filter((c) => c.pillarPost).map((c) => {
+    const more = c.published.length - GUIDE_LIST;
+    return `<section class="wrap guide-band">
     <a class="guide-feature${c.pillarPost.cover ? '' : ' no-img'}" href="${c.pillarPost.path}">
       ${c.pillarPost.cover ? `<img src="${c.pillarPost.cover.variants?.sm || c.pillarPost.cover.file}" alt="${esc(c.pillarPost.cover.alt)}" width="800" height="450" loading="lazy">` : ''}
       <span class="guide-body"><span class="eyebrow">Complete guide · ${c.published.length + 1} article${c.published.length ? 's' : ''}</span><strong>${esc(c.pillarPost.title)}</strong><span>${esc(c.description)}</span><span class="guide-cta">Start the guide →</span></span>
     </a>
-    ${c.published.length ? `<ul class="guide-list">${c.published.slice(0, 8).map((x) => `<li><a href="${x.path}">${esc(x.title)}</a></li>`).join('')}</ul>` : ''}
-  </section>`).join('');
-  const url = SITE.url + '/blog/';
+    ${c.published.length ? `<div class="guide-side"><ul class="guide-list" id="guide-${c.id}">${c.published.slice(0, GUIDE_LIST).map(guideItem).join('')}</ul>
+    ${more > 0 ? `<a class="guide-more" href="${c.pillarPost.path}#the-complete-guide" data-load="/blog/data/cluster-${c.id}.json" data-target="guide-${c.id}">Show ${more} more article${more > 1 ? 's' : ''} ↓</a>` : ''}</div>` : ''}
+  </section>`;
+  }).join('');
+  const list = posts.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const url = SITE.url + pageHref(page);
+  const crumbs = [{ name: 'Home', url: SITE.url + '/' }, { name: 'Blog', url: SITE.url + '/blog/' }, ...(first ? [] : [{ name: `Page ${page}`, url }])];
   const graph = [
     personNode(), websiteNode(),
-    breadcrumbNode(url + '#breadcrumb', [{ name: 'Home', url: SITE.url + '/' }, { name: 'Blog', url }]),
+    breadcrumbNode(url + '#breadcrumb', crumbs),
     {
-      '@type': 'CollectionPage', '@id': url + '#webpage', url, name: 'Blog — Theon Pham',
+      '@type': 'CollectionPage', '@id': url + '#webpage', url, name: first ? 'Blog — Theon Pham' : `Blog — Page ${page} — Theon Pham`,
       description: 'Notes on learning Spanish, faith, love and growing up by bilingual author Theon Pham.',
       isPartOf: { '@id': WEBSITE_ID }, breadcrumb: { '@id': url + '#breadcrumb' }, inLanguage: SITE.lang,
-      mainEntity: { '@type': 'ItemList', itemListElement: posts.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: p.url, name: p.title })) },
+      mainEntity: { '@type': 'ItemList', itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: (page - 1) * PER_PAGE + i + 1, url: p.url, name: p.title })) },
     },
   ];
+  const relLinks = `${page > 1 ? `<link rel="prev" href="${SITE.url + pageHref(page - 1)}">` : ''}${page < pages ? `<link rel="next" href="${SITE.url + pageHref(page + 1)}">` : ''}`;
+  const loadMore = page < pages
+    ? `<div class="load-more-wrap"><a class="load-more btn ghost" href="${pageHref(page + 1)}" data-load="/blog/data/page-${page + 1}.json" data-target="latest-grid">Load more articles</a></div>`
+    : '';
+  const pager = !first ? `<nav class="pager" aria-label="Blog pages"><a href="${pageHref(page - 1)}">← Newer articles</a></nav>` : '';
   return (
     head({
-      title: 'Blog — Learning Spanish, Faith & Growing Up | Theon Pham',
-      description: 'Gentle, practical notes on learning Spanish, faith, love and growing up from bilingual author Theon Pham.',
+      title: first ? 'Blog — Learning Spanish, Faith & Growing Up | Theon Pham' : `Blog — Page ${page} of ${pages} | Theon Pham`,
+      description: first ? 'Gentle, practical notes on learning Spanish, faith, love and growing up from bilingual author Theon Pham.' : `Page ${page} of articles on learning Spanish, faith, love and growing up from bilingual author Theon Pham.`,
       canonical: url, image: posts[0]?.cover?.file || SITE.defaultImage, imageW: posts[0]?.cover?.width || 900, imageH: posts[0]?.cover?.height || 1125,
-      schema: ldjson(graph),
+      extra: relLinks, schema: ldjson(graph),
     }) +
-    `<body class="blog">` + nav('blog') +
+    `<body class="blog${first ? '' : ' paged'}">` + nav('blog') +
     `<main id="main" class="site-main">
   <header class="page-head wrap">
-    <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span><span class="last">Blog</span></p></nav>
+    <nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="/">Home</a><span class="separator"> » </span>${first ? '<span class="last">Blog</span>' : `<a href="/blog/">Blog</a><span class="separator"> » </span><span class="last">Page ${page}</span>`}</p></nav>
     <span class="eyebrow">The Blog</span>
-    <h1>Notes on <em>Spanish</em>, faith &amp; growing up</h1>
+    ${first ? '<h1>Notes on <em>Spanish</em>, faith &amp; growing up</h1>' : `<h1>Articles <em>· page ${page}</em></h1>`}
     <p>Short, honest writing from the same quiet place my books come from.</p>
   </header>
   ${guides}
-  <section class="wrap">${guides ? '<h2 class="latest-title">Latest articles</h2>' : ''}${posts.length ? `<div class="post-grid">${posts.map(card).join('')}</div>` : '<p class="empty">New articles are coming soon.</p>'}</section>
-</main>` + footer()
+  <section class="wrap latest">${guides ? '<h2 class="latest-title">Latest articles</h2>' : ''}${list.length ? `<div class="post-grid" id="latest-grid">${list.map(card).join('')}</div>${loadMore}${pager}` : '<p class="empty">New articles are coming soon.</p>'}</section>
+</main>` + loadMoreScript + footer()
   );
 }
 
@@ -548,6 +600,7 @@ const robots = () => `User-agent: *
 Allow: /
 Disallow: /content/
 Disallow: /tools/
+Disallow: /blog/data/
 
 Sitemap: ${SITE.url}/sitemap.xml
 `;
@@ -611,8 +664,19 @@ POSTS_BY_SLUG = Object.fromEntries(posts.map((p) => [p.slug, p]));
 const clusters = loadClusters(posts);
 
 write('index.html', renderHome(posts));
-write('blog/index.html', renderBlogIndex(posts, clusters));
+write('blog/index.html', renderBlogIndex(posts, clusters, 1));
+for (let n = 2; n <= pageCount(posts); n++) write(`blog/page/${n}/index.html`, renderBlogIndex(posts, clusters, n));
+for (const [f, d] of Object.entries(blogData(posts, clusters))) write(f, JSON.stringify(d));
 for (const p of posts) write(`blog/${p.slug}/index.html`, renderPost(p, posts));
+// redirects for removed or renamed posts (GitHub Pages has no server redirects): content/_redirects.json
+const REDIRECTS = path.join(CONTENT, '_redirects.json');
+if (fs.existsSync(REDIRECTS)) {
+  for (const [from, to] of Object.entries(JSON.parse(fs.readFileSync(REDIRECTS, 'utf8')))) {
+    const rel = from.replace(/^\//, '') + (from.endsWith('/') ? 'index.html' : '');
+    if (fs.existsSync(path.join(OUT, rel))) { log(`  ⚠ redirect skipped, page exists: ${from}`); continue; }
+    write(rel, `<!DOCTYPE html><html lang="${SITE.lang}"><head><meta charset="UTF-8"><title>Redirecting…</title><link rel="canonical" href="${abs(to)}"><meta name="robots" content="noindex, follow"><meta http-equiv="refresh" content="0; url=${to}"><script>location.replace(${JSON.stringify(to)})</script></head><body><p>This page has moved: <a href="${to}">${abs(to)}</a></p></body></html>`);
+  }
+}
 write('sitemap.xml', sitemap(posts));
 write('robots.txt', robots());
 write('feed.xml', feed(posts));

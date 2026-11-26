@@ -247,3 +247,19 @@ figcaption a{color:inherit!important}
 @media (max-width:900px){.guide-band,.guide-feature{grid-template-columns:1fr}}
 .guide-feature.no-img{grid-template-columns:1fr}
 .post-card-img,.guide-feature{text-decoration:none}
+
+/* load more (blog) */
+.guide-side{display:flex;flex-direction:column;gap:.9rem}
+.guide-more{align-self:flex-start;font-size:.84rem;font-weight:500;color:var(--gold-ink);text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:2px;cursor:pointer}
+.guide-more:hover{color:var(--ink)}
+.latest .post-grid{margin-bottom:2.2rem}
+.load-more-wrap{display:flex;justify-content:center;margin-bottom:5rem}
+.load-more{min-width:220px;justify-content:center;cursor:pointer}
+.load-more.loading,.guide-more.loading{opacity:.55;pointer-events:none}
+.load-more.loading::after,.guide-more.loading::after{content:"";width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;margin-left:.5rem;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pager{display:flex;justify-content:center;margin:-3rem 0 5rem}
+.pager a{font-size:.86rem;color:var(--ink-2)}
+.guide-feature img{aspect-ratio:auto;height:100%;min-height:300px}
+.guide-feature{align-items:stretch}
+@media (max-width:900px){.guide-feature img{min-height:0;aspect-ratio:16/9}}
