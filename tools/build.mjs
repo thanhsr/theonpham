@@ -349,7 +349,7 @@ const figure = (img, cls = 'wp-block-image size-large', eager = false) => {
 
 const bookBox = (b) =>
   !b ? '' : `<aside class="book-cta">
-  <a class="book-cta-cover" href="${amazon(b.asin)}" target="_blank" rel="noopener sponsored"><img src="${b.image}" alt="${esc(b.short)} book cover" loading="lazy" onerror="this.parentNode.classList.add('noimg')"><span>${esc(b.short)}</span></a>
+  <a class="book-cta-cover" href="${amazon(b.asin)}" target="_blank" rel="noopener sponsored"><img src="${b.image}" alt="${esc(b.short)} book cover" width="120" height="180" loading="lazy" onerror="this.parentNode.classList.add('noimg')"><span>${esc(b.short)}</span></a>
   <div>
     <span class="eyebrow">From the author</span>
     <p class="book-cta-title">${esc(b.short)}${b.alt ? ` <em>· ${esc(b.alt)}</em>` : ''}</p>
@@ -497,7 +497,7 @@ ${cover ? `<link rel="preload" as="image" href="${cover.file}"${cover.variants?.
       <h1 class="entry-title">${esc(p.title)}</h1>
       ${p.excerpt ? `<p class="entry-excerpt">${esc(p.excerpt)}</p>` : ''}
       <div class="entry-meta">
-        <img src="${AUTHOR.image}" alt="" width="40" height="40" class="avatar">
+        <img src="${AUTHOR.image}" alt="Theon Pham" width="40" height="40" class="avatar">
         <span class="byline">By <span class="author"><a href="/" rel="author">${esc(AUTHOR.name)}</a></span></span>
         <span class="sep">·</span>
         <span class="posted-on"><time class="entry-date published" datetime="${p.date_published}">${fmtDate(p.date_published)}</time>${p.date_modified !== p.date_published ? ` <span class="updated-label">Updated <time class="updated" datetime="${p.date_modified}">${fmtDate(p.date_modified)}</time></span>` : ''}</span>
@@ -619,7 +619,7 @@ function renderBlogIndex(posts, clusters = [], page = 1) {
   return (
     head({
       title: first ? 'Blog — Learning Spanish & Bilingual Life | Theon Pham' : `Blog — Page ${page} of ${pages} | Theon Pham`,
-      description: first ? 'Practical notes on learning Spanish, English–Spanish translation and bilingual life from author and translator Theon Pham.' : `Page ${page} of articles on learning Spanish and bilingual life from author and translator Theon Pham.`,
+      description: first ? 'Practical notes on learning Spanish, English–Spanish translation and bilingual life from author and translator Theon Pham.' : `Page ${page} of articles on learning Spanish, common mistakes, confusing words and bilingual life from author and translator Theon Pham.`,
       canonical: url, image: posts[0]?.cover?.file || SITE.defaultImage, imageW: posts[0]?.cover?.width || 900, imageH: posts[0]?.cover?.height || 1125,
       extra: relLinks, schema: ldjson(graph),
     }) +
