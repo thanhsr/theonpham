@@ -188,7 +188,7 @@ const footer = () => `
       <ul>${BOOKS.map((b) => `<li><a href="${amazon(b.asin)}" target="_blank" rel="noopener">${esc(b.short)}</a></li>`).join('')}</ul>
     </div>
   </div>
-  <div class="wrap foot-bottom"><span>© ${new Date().getFullYear()} Theon Pham</span><span><a href="/editorial-policy/">Editorial Policy</a> · <a href="/privacy-policy/">Privacy Policy</a> · Written in two languages.</span></div>
+  <div class="wrap foot-bottom"><span>© ${new Date().getFullYear()} Theon Pham</span><span>Written in two languages.</span></div>
 </footer>
 <script>
 const b=document.getElementById('burger'),l=document.getElementById('links');
