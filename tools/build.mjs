@@ -25,6 +25,12 @@ const slugify = (s) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/<[^>]+>/g, '')
     .replace(/&[a-z]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70);
 const stripTags = (h = '') => h.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+// turn &amp; &rsquo; &#39; … back into characters, so esc() doesn't double-escape them (Love &amp;amp; dating)
+const decodeEntities = (t = '') => t
+  .replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+  .replace(/&#39;|&apos;|&rsquo;|&lsquo;/g, (m) => (m === '&lsquo;' ? '‘' : m === '&rsquo;' ? '’' : "'"))
+  .replace(/&ldquo;/g, '“').replace(/&rdquo;/g, '”').replace(/&ndash;/g, '–').replace(/&mdash;/g, '—')
+  .replace(/&#(\d+);/g, (m, n) => String.fromCharCode(+n)).replace(/&amp;/g, '&');
 const wordCount = (h) => stripTags(h).split(' ').filter(Boolean).length;
 const fmtDate = (d) =>
   new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/New_York' });
@@ -321,7 +327,7 @@ function processBody(p) {
     let id = (attrs.match(/id="([^"]+)"/) || [])[1] || slugify(inner);
     while (used.has(id)) id += '-2';
     used.add(id);
-    toc.push({ lvl: +lvl, id, text: stripTags(inner) });
+    toc.push({ lvl: +lvl, id, text: decodeEntities(stripTags(inner)).replace(/^\d+[.)]\s+/, '') }); // TOC adds its own numbers
     return `<h${lvl} id="${id}"${attrs.replace(/\s*id="[^"]*"/, '')}>${inner}</h${lvl}>`;
   });
   html = html.replace(/(<p>)?\s*\{\{image:(\d+)\}\}\s*(<\/p>)?/g, (m, a, n) => {

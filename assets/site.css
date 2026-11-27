@@ -119,9 +119,11 @@ figcaption a{color:inherit!important}
 .wp-block-rank-math-toc-block .toc-title{font-size:1.3rem;margin:0;display:flex;justify-content:space-between;align-items:center}
 .wp-block-rank-math-toc-block .toc-title::after{content:"–";color:var(--gold)}
 .wp-block-rank-math-toc-block details:not([open]) .toc-title::after{content:"+"}
-.wp-block-rank-math-toc-block nav ul{list-style:none;padding:0;margin-top:.8rem}
-.wp-block-rank-math-toc-block nav ul ul{padding-left:1.1rem;margin-top:.3rem}
-.wp-block-rank-math-toc-block li{margin:.3rem 0;font-size:.93rem}
+.wp-block-rank-math-toc-block nav ul{list-style:none;padding:0;margin-top:.8rem;counter-reset:toc}
+.wp-block-rank-math-toc-block nav ul ul{padding-left:0;margin-top:.3rem}
+.wp-block-rank-math-toc-block li{margin:.3rem 0;font-size:.93rem;counter-increment:toc;position:relative;padding-left:1.9rem}
+.wp-block-rank-math-toc-block li::before{content:counters(toc,".") ".";position:absolute;left:0;color:var(--gold);font-variant-numeric:tabular-nums;font-weight:600}
+.wp-block-rank-math-toc-block li li{padding-left:3rem}
 .wp-block-rank-math-toc-block a{text-decoration:none!important;color:var(--ink-2)!important}
 .wp-block-rank-math-toc-block a:hover{color:var(--gold-ink)!important}
 
