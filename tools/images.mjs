@@ -140,7 +140,7 @@ async function save(buf, file, w, h) {
     .resize(w, h, { fit: 'cover', position: sharp.strategy.attention })
     .modulate({ saturation: 1.02 })
     .sharpen({ sigma: 0.5 })
-    .webp({ quality: 80, effort: 5 })
+    .webp({ quality: 74, effort: 6 })
     .toFile(file);
   return fs.statSync(file).size;
 }

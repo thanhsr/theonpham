@@ -1,3 +1,12 @@
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:300;font-display:swap;src:url(/assets/fonts/be-vietnam-pro-latin-300-normal.woff2) format("woff2")}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/be-vietnam-pro-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/be-vietnam-pro-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/be-vietnam-pro-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:400;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:500;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-500-italic.woff2) format("woff2")}
 /* Shared styles for blog, article and author pages (theonpham.com) */
 :root{
   --paper:#f6f1e7; --paper-2:#efe7d8; --ink:#1d1a16; --ink-2:#4a443b; --muted:#857c6e;
@@ -320,3 +329,5 @@ a.pager-num:hover{border-color:var(--line);background:rgba(255,255,255,.6)}
 .quiz-ans p{margin:.5rem 0 0!important;color:var(--ink-2)}
 .quiz-score{font-family:var(--serif);font-size:1.35rem!important;color:var(--ink);margin-top:.8rem!important}
 
+
+@media (max-width:800px){nav#nav{backdrop-filter:none;background:var(--paper)}}

@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <!-- Google Tag Manager -->
-<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-M222PGZ2"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
   gtag('js', new Date());
+  // load GTM after the page has rendered (first interaction, or shortly after load) to keep it off the critical path
+  (function(){var done=false;function load(){if(done)return;done=true;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtm.js?id=GTM-M222PGZ2';document.head.appendChild(s);}
+  ['scroll','mousemove','touchstart','keydown','click'].forEach(function(e){window.addEventListener(e,load,{once:true,passive:true});});
+  window.addEventListener('load',function(){setTimeout(load,2500);});})();
 </script>
 <!-- End Google Tag Manager -->
 
@@ -39,10 +42,20 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192.png?v=2">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
 <meta name="theme-color" content="#f6f1e7">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
+<link rel="preload" href="/assets/fonts/be-vietnam-pro-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/cormorant-garamond-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+ <style>
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:300;font-display:swap;src:url(/assets/fonts/be-vietnam-pro-latin-300-normal.woff2) format("woff2")}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/be-vietnam-pro-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/be-vietnam-pro-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/be-vietnam-pro-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:400;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:500;font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-500-italic.woff2) format("woff2")}
+
   :root{
     --paper:#f6f1e7; --paper-2:#efe7d8; --ink:#1d1a16; --ink-2:#4a443b; --muted:#857c6e;
     --gold:#c8902f; --gold-soft:#e7c98f; --line:rgba(29,26,22,.12); --night:#191612;
@@ -261,7 +274,7 @@
       <div class="social hero-s rv d3"><a href="https://x.com/theon_ph" target="_blank" rel="noopener me" aria-label="X" title="X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a href="https://www.facebook.com/theonpham" target="_blank" rel="noopener me" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971H15.83c-1.491 0-1.956.931-1.956 1.886v2.264h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg></a><a href="https://www.youtube.com/@theonpham.official" target="_blank" rel="noopener me" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a><a href="https://www.goodreads.com/author/show/73164463.Theon_Pham" target="_blank" rel="noopener me" aria-label="Goodreads" title="Goodreads"><svg viewBox="0 0 24 24"><path d="M4 3.5A1.5 1.5 0 0 1 5.5 2H19v17H5.5a1.5 1.5 0 0 0 0 3H19v-1.5h1V23H5.5A3.5 3.5 0 0 1 2 19.5v-15A1.5 1.5 0 0 1 4 3.5zm3 2.5v2h9V6H7zm0 4v2h6v-2H7z"/></svg></a><a href="https://www.pinterest.com/theonpham/" target="_blank" rel="noopener me" aria-label="Pinterest" title="Pinterest"><svg viewBox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg></a></div>
     </div>
     <div class="portrait rv d2">
-      <div class="frame"><img src="/assets/theon.jpg" alt="Portrait of Theon Pham" width="900" height="1125"></div>
+      <div class="frame"><img src="/assets/theon-720.webp" alt="Portrait of Theon Pham" width="720" height="900" loading="lazy" decoding="async"></div>
       <div class="sun"></div>
       <a class="badge" href="#books"><b>3 bilingual books</b><small>English – Spanish readers</small></a>
     </div>
@@ -281,7 +294,7 @@
 
     <div class="feature rv">
       <a class="cover" href="https://www.amazon.com/dp/B0HQW9N3FN" target="_blank" rel="noopener">
-        <img src="https://m.media-amazon.com/images/I/516MV-55TgL._SL1491_.jpg" alt="A Road in Bloom / Un camino en flor book cover" width="300" height="450" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+        <img src="https://m.media-amazon.com/images/I/516MV-55TgL._SL600_.jpg" alt="A Road in Bloom / Un camino en flor book cover" width="300" height="450" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
         <span class="ph"><b>A Road<br>in Bloom</b><i>Un camino en flor</i><small>Theon Pham</small></span>
       </a>
       <div>
@@ -306,7 +319,7 @@
 
     <div class="feature flip tint rv">
       <a class="cover" href="https://www.amazon.com/dp/B0HSP416SK" target="_blank" rel="noopener">
-        <img src="https://m.media-amazon.com/images/I/61c3xib0q0L._SL1491_.jpg" alt="The Mind Lies / La mente miente book cover" width="300" height="450" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+        <img src="https://m.media-amazon.com/images/I/61c3xib0q0L._SL600_.jpg" alt="The Mind Lies / La mente miente book cover" width="300" height="450" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
         <span class="ph"><b>The Mind<br>Lies</b><i>La mente miente</i><small>Theon Pham</small></span>
       </a>
       <div>
@@ -331,7 +344,7 @@
 
     <div class="feature rose rv">
       <a class="cover" href="https://www.amazon.com/dp/B0HSJFWBPC" target="_blank" rel="noopener">
-        <img src="https://m.media-amazon.com/images/I/61IjFGLVrDL._SL1491_.jpg" alt="Love, Slowly / Amor, despacio book cover" width="300" height="450" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+        <img src="https://m.media-amazon.com/images/I/61IjFGLVrDL._SL600_.jpg" alt="Love, Slowly / Amor, despacio book cover" width="300" height="450" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
         <span class="ph"><b>Love,<br>Slowly</b><i>Amor, despacio</i><small>Theon Pham</small></span>
       </a>
       <div>

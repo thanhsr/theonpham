@@ -14,6 +14,8 @@ const OUT = path.join(ROOT, '_site');
 const CONTENT = path.join(ROOT, 'content');
 const QUIET = process.argv.includes('--quiet');
 // cache-busting: the CSS URL changes whenever site.css changes
+// site.css is inlined into every page (one less render-blocking request on mobile)
+const SITE_CSS = fs.readFileSync(path.join(ROOT, 'assets/site.css'), 'utf8').replace(/\n\s*/g, '\n').trim();
 const CSS_VER = crypto.createHash('md5').update(fs.readFileSync(path.join(ROOT, 'assets/site.css'))).digest('hex').slice(0, 8);
 const log = (...a) => !QUIET && console.log(...a);
 
@@ -126,12 +128,15 @@ function head({ title, description, canonical, image, imageAlt, imageW = 1200, i
 <head>
 <meta charset="UTF-8">
 <!-- Google Tag Manager -->
-<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-M222PGZ2"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
   gtag('js', new Date());
+  // load GTM after the page has rendered (first interaction, or shortly after load) to keep it off the critical path
+  (function(){var done=false;function load(){if(done)return;done=true;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtm.js?id=GTM-M222PGZ2';document.head.appendChild(s);}
+  ['scroll','mousemove','touchstart','keydown','click'].forEach(function(e){window.addEventListener(e,load,{once:true,passive:true});});
+  window.addEventListener('load',function(){setTimeout(load,2500);});})();
 </script>
 <!-- End Google Tag Manager -->
 
@@ -164,10 +169,10 @@ ${extra}
 <link rel="alternate" type="application/rss+xml" title="${esc(SITE.name)} &raquo; Feed" href="${SITE.url}/feed.xml">
 <meta name="p:domain_verify" content="8b3b43537bcbd6c8224f4204ecfdc1f0"/>
 <meta name="theme-color" content="#f6f1e7">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=${CSS_VER}">
+<link rel="preload" href="/assets/fonts/be-vietnam-pro-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/cormorant-garamond-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>${SITE_CSS}</style>
 ${schema}
 </head>`;
 }
@@ -358,7 +363,7 @@ const figure = (img, cls = 'wp-block-image size-large', eager = false) => {
 
 const bookBox = (b) =>
   !b ? '' : `<aside class="book-cta">
-  <a class="book-cta-cover" href="${amazon(b.asin)}" target="_blank" rel="noopener sponsored"><img src="${b.image}" alt="${esc(b.short)} book cover" width="120" height="180" loading="lazy" onerror="this.parentNode.classList.add('noimg')"><span>${esc(b.short)}</span></a>
+  <a class="book-cta-cover" href="${amazon(b.asin)}" target="_blank" rel="noopener sponsored"><img src="${b.image.replace(/\._SL\d+_\./, '._SL400_.')}" alt="${esc(b.short)} book cover" width="120" height="180" loading="lazy" decoding="async" onerror="this.parentNode.classList.add('noimg')"><span>${esc(b.short)}</span></a>
   <div>
     <span class="eyebrow">From the author</span>
     <p class="book-cta-title">${esc(b.short)}${b.alt ? ` <em>· ${esc(b.alt)}</em>` : ''}</p>
@@ -392,7 +397,7 @@ const faqBlock = (faq = []) =>
 
 const listJoin = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + (a.length > 2 ? ',' : '') + ' and ' + a[a.length - 1]);
 const authorBox = () => `<div class="author-box" id="author">
-  <img src="${AUTHOR.image}" alt="${esc(AUTHOR.name)}" width="96" height="96" loading="lazy">
+  <img src="/assets/theon-192.webp" alt="${esc(AUTHOR.name)}" width="96" height="96" loading="lazy" decoding="async">
   <div>
     <span class="eyebrow">Written by</span>
     <p class="author-name"><a href="/" rel="author">${esc(AUTHOR.name)}</a></p>
@@ -506,7 +511,7 @@ ${cover ? `<link rel="preload" as="image" href="${cover.file}"${cover.variants?.
       <h1 class="entry-title">${esc(p.title)}</h1>
       ${p.excerpt ? `<p class="entry-excerpt">${esc(p.excerpt)}</p>` : ''}
       <div class="entry-meta">
-        <img src="${AUTHOR.image}" alt="Theon Pham" width="40" height="40" class="avatar">
+        <img src="/assets/theon-192.webp" alt="Theon Pham" width="40" height="40" class="avatar" decoding="async">
         <span class="byline">By <span class="author"><a href="/" rel="author">${esc(AUTHOR.name)}</a></span></span>
         <span class="sep">·</span>
         <span class="posted-on"><time class="entry-date published" datetime="${p.date_published}">${fmtDate(p.date_published)}</time>${p.date_modified !== p.date_published ? ` <span class="updated-label">Updated <time class="updated" datetime="${p.date_modified}">${fmtDate(p.date_modified)}</time></span>` : ''}</span>
