@@ -155,7 +155,8 @@ ${extra}
 <link rel="icon" href="/favicon.ico?v=2" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png?v=2">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
-<link rel="alternate" type="application/rss+xml" title="${esc(SITE.name)} — Blog" href="/feed.xml">
+<link rel="alternate" type="application/rss+xml" title="${esc(SITE.name)} &raquo; Feed" href="${SITE.url}/feed.xml">
+<meta name="p:domain_verify" content="8b3b43537bcbd6c8224f4204ecfdc1f0"/>
 <meta name="theme-color" content="#f6f1e7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -820,16 +821,49 @@ Disallow: /blog/data/
 
 Sitemap: ${SITE.url}/sitemap.xml
 `;
+// WordPress-style RSS 2.0 feed, summary only (like WP "Excerpt" mode) so the full articles can't be scraped from it
+const feedSummary = (p) =>
+  `<p>${esc(p.meta_description)}</p>\n<p>The post <a href="${p.url}">${esc(p.title)}</a> appeared first on <a href="${SITE.url}/">${esc(SITE.name)}</a>.</p>`;
+const rfc822 = (d) => new Date(d).toUTCString().replace('GMT', '+0000');
 function feed(posts) {
+  const items = [...posts].sort((a, b) => new Date(b.date_published) - new Date(a.date_published)).slice(0, 20);
+  const last = items.length ? items.reduce((m, p) => (new Date(p.date_modified || p.date_published) > m ? new Date(p.date_modified || p.date_published) : m), new Date(0)) : new Date();
   return `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	xmlns:media="http://search.yahoo.com/mrss/">
 <channel>
-<title>${esc(SITE.name)} — Blog</title>
-<link>${SITE.url}/blog/</link>
-<atom:link href="${SITE.url}/feed.xml" rel="self" type="application/rss+xml"/>
-<description>${esc(SITE.description)}</description>
-<language>${SITE.lang}</language>
-${posts.slice(0, 20).map((p) => `<item><title>${esc(p.title)}</title><link>${p.url}</link><guid>${p.url}</guid><pubDate>${new Date(p.date_published).toUTCString()}</pubDate><description>${esc(p.meta_description)}</description>${p.cover ? `<media:content url="${abs(p.cover.file)}" medium="image" width="${p.cover.width}" height="${p.cover.height}"/>` : ''}</item>`).join('\n')}
+	<title>${esc(SITE.name)}</title>
+	<atom:link href="${SITE.url}/feed.xml" rel="self" type="application/rss+xml"/>
+	<link>${SITE.url}/</link>
+	<description>${esc(SITE.description)}</description>
+	<lastBuildDate>${rfc822(last)}</lastBuildDate>
+	<language>${SITE.lang}</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<image>
+		<url>${SITE.url}/assets/icon-512.png</url>
+		<title>${esc(SITE.name)}</title>
+		<link>${SITE.url}/</link>
+		<width>144</width>
+		<height>144</height>
+	</image>
+${items.map((p) => `	<item>
+		<title>${esc(p.title)}</title>
+		<link>${p.url}</link>
+		<dc:creator><![CDATA[${AUTHOR.name}]]></dc:creator>
+		<pubDate>${rfc822(p.date_published)}</pubDate>
+		<category><![CDATA[${p.category || 'Blog'}]]></category>
+${(p.tags || []).filter((t) => t && t.toLowerCase() !== (p.category || '').toLowerCase()).map((t) => `		<category><![CDATA[${t}]]></category>`).join('\n')}
+		<guid isPermaLink="true">${p.url}</guid>
+		<description><![CDATA[${feedSummary(p)}]]></description>
+${p.cover ? `		<media:content url="${abs(p.cover.file)}" medium="image" type="image/webp" width="${p.cover.width}" height="${p.cover.height}"><media:description type="plain"><![CDATA[${p.cover.alt || p.title}]]></media:description></media:content>` : ''}
+	</item>`).join('\n')}
 </channel>
 </rss>
 `;

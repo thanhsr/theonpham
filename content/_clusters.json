@@ -100,14 +100,6 @@
               "status": "written"
             },
             {
-              "slug": "ser-vs-estar",
-              "title": "Ser vs Estar: A Simple Way to Finally Get It",
-              "focus_keyword": "ser vs estar",
-              "intent": "informational",
-              "book": "the-mind-lies",
-              "status": "written"
-            },
-            {
               "slug": "te-quiero-vs-te-amo",
               "title": "Te Quiero vs Te Amo: How to Say “I Love You” in Spanish",
               "focus_keyword": "te quiero vs te amo",
@@ -553,6 +545,59 @@
               "status": "written"
             }
           ]
+        },
+        {
+          "name": "Messages to send",
+          "posts": [
+            {
+              "slug": "good-morning-messages-in-spanish",
+              "title": "Good morning messages",
+              "focus_keyword": "good morning messages in spanish",
+              "priority": "P1",
+              "book": "love-slowly",
+              "status": "written"
+            },
+            {
+              "slug": "good-night-messages-in-spanish",
+              "title": "Good night messages",
+              "focus_keyword": "good night messages in spanish",
+              "priority": "P1",
+              "book": "love-slowly",
+              "status": "written"
+            },
+            {
+              "slug": "anniversary-messages-in-spanish",
+              "title": "Anniversary messages",
+              "focus_keyword": "anniversary messages in spanish",
+              "priority": "P1",
+              "book": "love-slowly",
+              "status": "written"
+            },
+            {
+              "slug": "valentines-day-messages-in-spanish",
+              "title": "Valentine’s Day messages",
+              "focus_keyword": "valentines day messages in spanish",
+              "priority": "P1",
+              "book": "love-slowly",
+              "status": "written"
+            },
+            {
+              "slug": "mothers-day-messages-in-spanish",
+              "title": "Mother’s Day messages",
+              "focus_keyword": "mothers day messages in spanish",
+              "priority": "P1",
+              "book": "a-road-in-bloom",
+              "status": "written"
+            },
+            {
+              "slug": "fathers-day-messages-in-spanish",
+              "title": "Father’s Day messages",
+              "focus_keyword": "fathers day messages in spanish",
+              "priority": "P1",
+              "book": "a-road-in-bloom",
+              "status": "written"
+            }
+          ]
         }
       ]
     },
@@ -567,6 +612,14 @@
         {
           "name": "Verb pairs",
           "posts": [
+            {
+              "slug": "ser-vs-estar",
+              "title": "Ser vs Estar: A Simple Way to Finally Get It",
+              "focus_keyword": "ser vs estar",
+              "intent": "informational",
+              "book": "the-mind-lies",
+              "status": "written"
+            },
             {
               "slug": "pedir-vs-preguntar",
               "title": "Pedir vs preguntar",
@@ -1032,6 +1085,94 @@
               "focus_keyword": "spanish capitalization rules",
               "priority": "P2",
               "book": "a-road-in-bloom",
+              "status": "written"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spanish-slang",
+      "name": "Spanish Slang & Expressions",
+      "pillar": "spanish-slang",
+      "description": "The slang, sayings and idioms Spanish speakers really use, country by country, explained by an English–Spanish translator with examples and a quiz for each.",
+      "pillar_focus_keyword": "spanish slang",
+      "groups": [
+        {
+          "name": "Slang by country",
+          "posts": [
+            {
+              "slug": "mexican-slang",
+              "title": "Mexican slang",
+              "focus_keyword": "mexican slang",
+              "priority": "P1",
+              "book": "a-road-in-bloom",
+              "status": "written"
+            },
+            {
+              "slug": "spain-slang",
+              "title": "Spain slang",
+              "focus_keyword": "spain slang",
+              "priority": "P1",
+              "book": "the-mind-lies",
+              "status": "written"
+            },
+            {
+              "slug": "argentine-slang",
+              "title": "Argentine slang",
+              "focus_keyword": "argentine slang",
+              "priority": "P1",
+              "book": "the-mind-lies",
+              "status": "written"
+            },
+            {
+              "slug": "colombian-slang",
+              "title": "Colombian slang",
+              "focus_keyword": "colombian slang",
+              "priority": "P1",
+              "book": "a-road-in-bloom",
+              "status": "written"
+            }
+          ]
+        },
+        {
+          "name": "Idioms & sayings",
+          "posts": [
+            {
+              "slug": "spanish-proverbs",
+              "title": "Spanish proverbs",
+              "focus_keyword": "spanish proverbs",
+              "priority": "P1",
+              "book": "the-mind-lies",
+              "status": "written"
+            },
+            {
+              "slug": "english-idioms-in-spanish",
+              "title": "English idioms in Spanish",
+              "focus_keyword": "english idioms in spanish",
+              "priority": "P1",
+              "book": "the-mind-lies",
+              "status": "written"
+            },
+            {
+              "slug": "spanish-animal-idioms",
+              "title": "Animal idioms",
+              "focus_keyword": "spanish animal idioms",
+              "priority": "P1",
+              "book": "a-road-in-bloom",
+              "status": "written"
+            }
+          ]
+        },
+        {
+          "name": "Natural speech",
+          "posts": [
+            {
+              "slug": "spanish-filler-words",
+              "title": "Filler words",
+              "focus_keyword": "spanish filler words",
+              "priority": "P1",
+              "book": "the-mind-lies",
               "status": "written"
             }
           ]
