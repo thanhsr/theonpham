@@ -104,7 +104,15 @@ nav#nav{position:sticky;top:0;z-index:50;background:rgba(246,241,231,.92);backdr
 figcaption,.wp-element-caption{font-size:.8rem;color:var(--muted);margin-top:.6rem;text-align:center}
 figcaption .credit{opacity:.85}
 figcaption a{color:inherit!important}
-.entry-content table{width:100%;border-collapse:collapse;font-size:.94rem}
+.entry-content .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.4rem 0;border:1px solid var(--line);border-radius:12px;background:#fffdf8}
+.entry-content .table-wrap:focus{outline:2px solid var(--gold);outline-offset:2px}
+.entry-content table{width:100%;border-collapse:collapse;font-size:.94rem;margin:0}
+.entry-content .table-wrap th:first-child,.entry-content .table-wrap td:first-child{padding-left:1rem}
+@media (max-width:640px){
+  .entry-content table{font-size:.86rem}
+  .entry-content th,.entry-content td{padding:.55rem .5rem;min-width:7.5rem}
+  .entry-content .table-wrap{position:relative;background:linear-gradient(to right,#fffdf8 30%,rgba(255,253,248,0)) left/40px 100% no-repeat local,linear-gradient(to left,#fffdf8 30%,rgba(255,253,248,0)) right/40px 100% no-repeat local,radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.12),transparent) left/12px 100% no-repeat scroll,radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.12),transparent) right/12px 100% no-repeat scroll}
+}
 .entry-content th,.entry-content td{border-bottom:1px solid var(--line);padding:.7rem .6rem;text-align:left;vertical-align:top}
 .entry-content th{font-weight:600;background:var(--paper-2)}
 .entry-content .es{font-style:italic;color:var(--gold-ink)}

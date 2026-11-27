@@ -340,6 +340,8 @@ function processBody(p) {
     // insert TOC after the first paragraph, like Rank Math users usually place it
     html = html.replace(/<\/p>/, '</p>\n' + tocBlock(toc));
   }
+  // wide tables scroll sideways on phones instead of breaking the layout
+  html = html.replace(/<table>/g, '<div class="table-wrap" role="region" tabindex="0"><table>').replace(/<\/table>/g, '</table></div>');
   // external links open safely
   html = html.replace(/<a href="(https?:\/\/(?!theonpham\.com)[^"]+)"(?![^>]*target=)/g, '<a href="$1" target="_blank" rel="noopener"');
   return { html, toc };
