@@ -2,12 +2,15 @@
   "name": "theonpham.com",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=18.17" },
+  "engines": {
+    "node": ">=18.17"
+  },
   "scripts": {
     "build": "node tools/build.mjs",
     "preview": "node tools/preview.mjs",
     "images": "node tools/images.mjs",
-    "publish": "node tools/publish.mjs"
+    "publish": "node tools/publish.mjs",
+    "daily": "node tools/daily.mjs"
   },
   "devDependencies": {
     "sharp": "^0.33.5"
