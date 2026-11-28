@@ -323,6 +323,24 @@ function processBody(p) {
     html = /\{\{cluster\}\}/.test(html) ? html.replace(/(<p>)?\s*\{\{cluster\}\}\s*(<\/p>)?/g, block) : html + '\n' + block;
   } else html = html.replace(/(<p>)?\s*\{\{cluster\}\}\s*(<\/p>)?/g, '');
   if (p.quiz) html = /\{\{quiz\}\}/.test(html) ? html.replace(/(<p>)?\s*\{\{quiz\}\}\s*(<\/p>)?/g, quizBlock(p.quiz)) : html + '\n' + quizBlock(p.quiz);
+  // Optional blocks, so text never points at a post that isn't live yet:
+  //   {{if:a,b}}…{{/if}} keep only when all are published · {{ifany:a,b}}…{{/if}} when any is · {{ifnone:a,b}}…{{/if}} when none is
+  //   {{list:a|label;b|label}} → "A, B and C" with only the published ones
+  const isLive = (s) => !!POSTS_BY_SLUG[s];
+  const blockRe = /\{\{(if|ifany|ifnone):([a-z0-9,-]+)\}\}((?:(?!\{\{if)[\s\S])*?)\{\{\/if\}\}/g;
+  for (let prev = null; prev !== html; ) {
+    prev = html;
+    html = html.replace(blockRe, (m, kind, list, inner) => {
+      const ok = list.split(',').map(isLive);
+      const keep = kind === 'if' ? ok.every(Boolean) : kind === 'ifany' ? ok.some(Boolean) : !ok.some(Boolean);
+      return keep ? inner : '';
+    });
+  }
+  html = html.replace(/\{\{list:([^}]+)\}\}/g, (m, spec) => {
+    const items = spec.split(';').map((x) => x.split('|')).filter(([s]) => isLive(s.trim())).map(([s, t]) => `{{link:${s.trim()}|${t}}}`);
+    return items.length < 2 ? items.join('') : items.slice(0, -1).join(', ') + ' and ' + items[items.length - 1];
+  });
+  html = html.replace(/<(p|li)>\s*<\/\1>\n?/g, '');
   // {{link:slug|anchor text}} → link if that post is published, plain text until then
   html = html.replace(/\{\{link:([a-z0-9-]+)(?:\|([^}]+))?\}\}/g, (m, slug, text) => {
     const t = POSTS_BY_SLUG[slug];
